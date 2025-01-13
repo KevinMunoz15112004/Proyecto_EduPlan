@@ -4,12 +4,16 @@ import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.*;
 import org.bson.Document;
+import javax.swing.*;
+import java.awt.*;
+
+import javax.swing.*;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         // URL de conexión a MongoDB Atlas (reemplaza con tu propia URL)
-        String uri = "mongodb+srv://kevinmunoz07:mNh1sxHdr4BBBdav@cluster0.sj2qy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+        /*String uri = "mongodb+srv://kevinmunoz07:mNh1sxHdr4BBBdav@cluster0.sj2qy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
         try (MongoClient mongoClient = MongoClients.create(uri)) {
             // Conectar a la base de datos
@@ -35,6 +39,14 @@ public class Main {
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
+
+        JFrame frame = new JFrame("Login");
+        frame.setContentPane(new login().logPanel);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(600, 600);
+        frame.setPreferredSize(new Dimension(600, 600));
+        frame.pack();
+        frame.setVisible(true);
     }
 }
