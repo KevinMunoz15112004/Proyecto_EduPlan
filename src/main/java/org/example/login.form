@@ -22,14 +22,6 @@
           <grid row="12" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
         </constraints>
       </vspacer>
-      <component id="13b3f" class="javax.swing.JTextField" binding="textField1" default-binding="true">
-        <constraints>
-          <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-        </constraints>
-        <properties/>
-      </component>
       <component id="3c418" class="javax.swing.JPasswordField" binding="passwordField1" default-binding="true">
         <constraints>
           <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
@@ -38,12 +30,12 @@
         </constraints>
         <properties/>
       </component>
-      <component id="c66dc" class="javax.swing.JLabel" binding="userLabel">
+      <component id="c66dc" class="javax.swing.JLabel" binding="cedulaLabel">
         <constraints>
           <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Usuario"/>
+          <text value="Cédula"/>
         </properties>
       </component>
       <component id="c2454" class="javax.swing.JLabel" binding="claveLabel">
@@ -122,6 +114,14 @@
           <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
         </constraints>
       </vspacer>
+      <component id="91624" class="javax.swing.JTextField" binding="cedulaText">
+        <constraints>
+          <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+        </constraints>
+        <properties/>
+      </component>
     </children>
   </grid>
 </form>

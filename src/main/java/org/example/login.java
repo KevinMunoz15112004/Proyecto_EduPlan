@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -12,10 +11,10 @@ import org.bson.Document;
 
 public class login {
     private JLabel BienvenidaLabel;
-    private JTextField textField1;
+    private JTextField cedulaText;
     private JPasswordField passwordField1;
     private JLabel claveLabel;
-    private JLabel userLabel;
+    private JLabel cedulaLabel;
     private JButton registrarseButton;
     private JLabel loginPanel;
     public JPanel logPanel;
@@ -37,38 +36,42 @@ public class login {
                 frame.setVisible(true);
             }
         });
+
         ingresarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String username = textField1.getText();
+                String cedula = cedulaText.getText();
                 char[] password = passwordField1.getPassword();
 
                 // Convertir la contraseña a un String
                 String passwordString = new String(password);
 
                 // Validar que los campos no estén vacíos
-                if (username.isEmpty() || passwordString.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Por favor, ingrese tanto el nombre de usuario como la contraseña.");
+                if (cedula.isEmpty() || passwordString.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Por favor, ingrese tanto la cédula como la contraseña.");
                     return;
                 }
 
                 // Conectar a MongoDB para verificar las credenciales
-                try (var mongoClient = MongoClients.create("mongodb+srv://kevinmunoz07:mNh1sxHdr4BBBdav@cluster0.sj2qy.mongodb.net/?retryWrites=true&w=majority")) {
-                    // Obtener la base de datos "gestion_academica" y la colección "usuarios"
-                    MongoDatabase database = mongoClient.getDatabase("Prueba_conexion");
-                    MongoCollection<Document> collection = database.getCollection("Prueba");
+                try (var mongoClient = MongoClients.create("")) {
+                    // Obtener la base de datos "conection" y la colección "registers"
+                    MongoDatabase database = mongoClient.getDatabase("conection");
+                    MongoCollection<Document> collection = database.getCollection("registers");
 
-                    // Buscar el usuario en la base de datos
-                    Document user = collection.find(new Document("username", username)).first();
+                    // Buscar el usuario en la base de datos usando la cédula
+                    Document user = collection.find(new Document("cedula", cedula)).first();
 
                     // Verificar si el usuario existe
                     if (user != null) {
                         // Comparar la contraseña ingresada con la almacenada en la base de datos
                         String storedPassword = user.getString("password");
                         if (storedPassword.equals(passwordString)) {
-                            JOptionPane.showMessageDialog(null, "Ingreso exitoso.");
+                            // Mostrar mensaje de bienvenida con el nombre y rol del usuario
+                            String username = user.getString("username");
+                            String rol = user.getString("rol");
+                            JOptionPane.showMessageDialog(null, "Bienvenido, " + username + ". Rol: " + rol);
 
-                            // Ingreso de ventana correspondiente
+                            // Ingreso de ventana correspondiente (puedes redirigir a la ventana principal o el dashboard aquí)
 
                         } else {
                             JOptionPane.showMessageDialog(null, "Contraseña incorrecta.");
