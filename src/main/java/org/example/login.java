@@ -21,29 +21,11 @@ public class login {
     private JButton ingresarButton;
 
     public login() {
-        registrarseButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFrame loginFrame = (JFrame) SwingUtilities.getWindowAncestor(logPanel);
-                loginFrame.dispose();
-
-                JFrame frame = new JFrame("Login");
-                frame.setContentPane(new register().registerPanel);
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setSize(600, 600);
-                frame.setPreferredSize(new Dimension(600, 600));
-                frame.pack();
-                frame.setVisible(true);
-            }
-        });
-
         ingresarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String cedula = cedulaText.getText();
+                String cedula = cedulaText.getText().trim();
                 char[] password = passwordField1.getPassword();
-
-                // Convertir la contraseña a un String
                 String passwordString = new String(password);
 
                 // Validar que los campos no estén vacíos
@@ -52,37 +34,66 @@ public class login {
                     return;
                 }
 
-                // Conectar a MongoDB para verificar las credenciales
+                // Conectar a MongoDB y verificar credenciales
                 try (var mongoClient = MongoClients.create("")) {
-                    // Obtener la base de datos "conection" y la colección "registers"
-                    MongoDatabase database = mongoClient.getDatabase("conection");
-                    MongoCollection<Document> collection = database.getCollection("registers");
+                    MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
 
-                    // Buscar el usuario en la base de datos usando la cédula
-                    Document user = collection.find(new Document("cedula", cedula)).first();
+                    // Verificar primero en la colección "estudiantes"
+                    MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");
+                    Document estudiante = estudiantesCollection.find(new Document("cedula", cedula)).first();
 
-                    // Verificar si el usuario existe
-                    if (user != null) {
-                        // Comparar la contraseña ingresada con la almacenada en la base de datos
-                        String storedPassword = user.getString("password");
+                    if (estudiante != null) {
+                        // Comparar contraseñas
+                        String storedPassword = estudiante.getString("password");
                         if (storedPassword.equals(passwordString)) {
-                            // Mostrar mensaje de bienvenida con el nombre y rol del usuario
-                            String username = user.getString("username");
-                            String rol = user.getString("rol");
-                            JOptionPane.showMessageDialog(null, "Bienvenido, " + username + ". Rol: " + rol);
-
-                            // Ingreso de ventana correspondiente (puedes redirigir a la ventana principal o el dashboard aquí)
-
+                            String nombre = estudiante.getString("nombre");
+                            JOptionPane.showMessageDialog(null, "Bienvenido, " + nombre + ". Rol: Estudiante");
+                            return;
                         } else {
                             JOptionPane.showMessageDialog(null, "Contraseña incorrecta.");
+                            return;
                         }
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Usuario no encontrado.");
                     }
+
+                    // Verificar en la colección "profesores"
+                    MongoCollection<Document> profesoresCollection = database.getCollection("profesores");
+                    Document profesor = profesoresCollection.find(new Document("cedula", cedula)).first();
+
+                    if (profesor != null) {
+                        // Comparar contraseñas
+                        String storedPassword = profesor.getString("password");
+                        if (storedPassword.equals(passwordString)) {
+                            String nombre = profesor.getString("nombre");
+                            JOptionPane.showMessageDialog(null, "Bienvenido, " + nombre + ". Rol: Profesor");
+                            return;
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Contraseña incorrecta.");
+                            return;
+                        }
+                    }
+
+                    // Si no se encuentra el usuario en ninguna colección
+                    JOptionPane.showMessageDialog(null, "Usuario no encontrado.");
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Error al verificar las credenciales: " + ex.getMessage());
                     ex.printStackTrace();
                 }
+            }
+        });
+
+        registrarseButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame loginFrame = (JFrame) SwingUtilities.getWindowAncestor(logPanel);
+                loginFrame.dispose();
+
+                JFrame frame = new JFrame("Elección del Rol");
+                frame.setContentPane(new rol_eleccion().rolPanel);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setSize(600, 600);
+                frame.setPreferredSize(new Dimension(600, 600));
+                frame.pack();
+                frame.setVisible(true);
             }
         });
     }
