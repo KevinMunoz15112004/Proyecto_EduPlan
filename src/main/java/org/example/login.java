@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -24,9 +26,9 @@ public class login {
         ingresarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String url = "";
                 String cedula = cedulaText.getText().trim();
-                char[] password = passwordField1.getPassword();
-                String passwordString = new String(password);
+                String passwordString = new String(passwordField1.getPassword());
 
                 // Validar que los campos no estén vacíos
                 if (cedula.isEmpty() || passwordString.isEmpty()) {
@@ -35,7 +37,7 @@ public class login {
                 }
 
                 // Conectar a MongoDB y verificar credenciales
-                try (var mongoClient = MongoClients.create("")) {
+                try (MongoClient mongoClient = MongoClients.create(url)) {
                     MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
 
                     // Verificar primero en la colección "estudiantes"
@@ -47,7 +49,16 @@ public class login {
                         String storedPassword = estudiante.getString("password");
                         if (storedPassword.equals(passwordString)) {
                             String nombre = estudiante.getString("nombre");
-                            JOptionPane.showMessageDialog(null, "Bienvenido, " + nombre + ". Rol: Estudiante");
+                            JFrame loginFrame = (JFrame) SwingUtilities.getWindowAncestor(logPanel);
+                            loginFrame.dispose();
+
+                            JFrame frame = new JFrame("Interfaz Estudiante");
+                            frame.setContentPane(new interfaz_estudiante(nombre).interfazEPanel);
+                            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                            frame.setSize(400, 400);
+                            frame.setPreferredSize(new Dimension(400, 400));
+                            frame.pack();
+                            frame.setVisible(true);
                             return;
                         } else {
                             JOptionPane.showMessageDialog(null, "Contraseña incorrecta.");

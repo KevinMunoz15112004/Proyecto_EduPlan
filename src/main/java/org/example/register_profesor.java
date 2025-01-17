@@ -4,7 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.List;
 
+import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -18,6 +21,7 @@ public class register_profesor {
     private JButton registrarButton;
     private JButton iniciarSesionButton;
     public JPanel profesorPanel;
+    private JTextField materiaField;
 
     public register_profesor() {
         iniciarSesionButton.addActionListener(new ActionListener() {
@@ -39,10 +43,11 @@ public class register_profesor {
         registrarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String url = "";
                 String cedula = cedulaField.getText().trim();
                 String nombre = nombreField.getText().trim();
-                char[] passwordChars = passwordField.getPassword();
-                String password = new String(passwordChars);
+                String materia = materiaField.getText().trim();
+                String password = new String(passwordField.getPassword());
 
                 // Validar que todos los campos estén llenos
                 if (cedula.isEmpty() || nombre.isEmpty() || password.isEmpty()) {
@@ -68,8 +73,17 @@ public class register_profesor {
                     return;
                 }
 
+                List<String> materiasValidas = Arrays.asList( "Matemáticas", "Literatura", "Estudios Sociales", "Biología",
+                        "Cultura Física", "Artística", "Física", "Química", "Filosofía",
+                        "Historia", "Economía", "Lectura Crítica");
+
+                if (!materiasValidas.contains(materia)) {
+                    JOptionPane.showMessageDialog(null, "La materia ingresada no se reconoce en la Institución");
+                    return;
+                }
+
                 // Conectar a la base de datos y registrar al profesor
-                try (var mongoClient = MongoClients.create("")) {
+                try (MongoClient mongoClient = MongoClients.create(url)) {
                     // Conectar a la base de datos y colección
                     MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
                     MongoCollection<Document> collection = database.getCollection("profesores");
@@ -92,6 +106,7 @@ public class register_profesor {
                     Document profesor = new Document("profesor_id", nextProfesorId)
                             .append("cedula", cedula)
                             .append("nombre", nombre)
+                            .append("materia", materia)
                             .append("password", password);
 
                     // Insertar el documento en la base de datos
@@ -101,6 +116,7 @@ public class register_profesor {
                     // Limpiar los campos después del registro
                     cedulaField.setText("");
                     nombreField.setText("");
+                    materiaField.setText("");
                     passwordField.setText("");
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Error al guardar en la base de datos: " + ex.getMessage());
