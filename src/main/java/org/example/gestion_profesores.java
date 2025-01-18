@@ -154,7 +154,7 @@ public class gestion_profesores {
     }
 
     private void cargarDatos(DefaultTableModel tableModel) {
-        String url = "mongodb+srv://kevinmunoz07:mNh1sxHdr4BBBdav@cluster0.sj2qy.mongodb.net/?retryWrites=true&w=majority";
+        String url = "";
         try (MongoClient mongoClient = MongoClients.create(url)) {
             MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
             MongoCollection<Document> estudiantesCollection = database.getCollection("profesores");
@@ -181,7 +181,7 @@ public class gestion_profesores {
     }
 
     private void eliminarUsuario(int userId) {
-        String url = "mongodb+srv://kevinmunoz07:mNh1sxHdr4BBBdav@cluster0.sj2qy.mongodb.net/?retryWrites=true&w=majority";
+        String url = "";
         try (MongoClient mongoClient = MongoClients.create(url)) {
             MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
             MongoCollection<Document> estudiantesCollection = database.getCollection("profesores");
@@ -195,7 +195,7 @@ public class gestion_profesores {
     }
 
     private void actualizarUsuario(int userId, String nuevoNombre, String nuevaMateria, String nuevaCedula, String nuevoPassword) {
-        String url = "mongodb+srv://kevinmunoz07:mNh1sxHdr4BBBdav@cluster0.sj2qy.mongodb.net/?retryWrites=true&w=majority";
+        String url = "";
         try (MongoClient mongoClient = MongoClients.create(url)) {
             MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
             MongoCollection<Document> estudiantesCollection = database.getCollection("profesores");
@@ -216,7 +216,7 @@ public class gestion_profesores {
     }
 
     private void reorganizarUserIds() {
-        String url = "mongodb+srv://kevinmunoz07:mNh1sxHdr4BBBdav@cluster0.sj2qy.mongodb.net/?retryWrites=true&w=majority";
+        String url = "";
         try (MongoClient mongoClient = MongoClients.create(url)) {
             MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
             MongoCollection<Document> profesoresCollection = database.getCollection("profesores");

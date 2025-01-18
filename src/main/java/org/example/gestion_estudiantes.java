@@ -125,7 +125,7 @@ public class gestion_estudiantes {
     }
 
     private void cargarDatos(DefaultTableModel tableModel) {
-        String url = "mongodb+srv://kevinmunoz07:mNh1sxHdr4BBBdav@cluster0.sj2qy.mongodb.net/?retryWrites=true&w=majority";
+        String url = "";
         try (MongoClient mongoClient = MongoClients.create(url)) {
             MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
             MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");
@@ -152,7 +152,7 @@ public class gestion_estudiantes {
     }
 
     private void eliminarUsuario(int userId) {
-        String url = "mongodb+srv://kevinmunoz07:mNh1sxHdr4BBBdav@cluster0.sj2qy.mongodb.net/?retryWrites=true&w=majority";
+        String url = "";
         try (MongoClient mongoClient = MongoClients.create(url)) {
             MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
             MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");
@@ -166,7 +166,7 @@ public class gestion_estudiantes {
     }
 
     private void actualizarUsuario(int userId, String nuevoNombre, String nuevoCurso, String nuevaCedula, String nuevaContraseña) {
-        String url = "mongodb+srv://kevinmunoz07:mNh1sxHdr4BBBdav@cluster0.sj2qy.mongodb.net/?retryWrites=true&w=majority";
+        String url = "";
         try (MongoClient mongoClient = MongoClients.create(url)) {
             MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
             MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");
@@ -187,7 +187,7 @@ public class gestion_estudiantes {
     }
 
     private void reorganizarUserIds() {
-        String url = "mongodb+srv://kevinmunoz07:mNh1sxHdr4BBBdav@cluster0.sj2qy.mongodb.net/?retryWrites=true&w=majority";
+        String url = "";
         try (MongoClient mongoClient = MongoClients.create(url)) {
             MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
             MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");
