@@ -6,19 +6,29 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class rol_eleccion {
-    private JTextField rolTextField;
     private JButton aceptarButton;
     public JPanel rolPanel;
+    private JComboBox rolBox;
+    private JButton regresarButton;
 
     public rol_eleccion() {
+        // Inicializar el JComboBox con las opciones
+        rolBox.addItem("");
+        rolBox.addItem("Estudiante");
+        rolBox.addItem("Profesor");
+        rolBox.addItem("Administrador");
+
         aceptarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String rol = rolTextField.getText().trim();
+                // Obtener la opción seleccionada
+                String selectedRole = (String) rolBox.getSelectedItem();
 
-                // Validar que el rol sea "Estudiante" o "Profesor"
-                if (rol.equalsIgnoreCase("Estudiante")) {
-                    // Redirigir a la ventana de registro de estudiantes
+                if (selectedRole == null || selectedRole.isEmpty()) {
+                    JOptionPane.showMessageDialog(rolPanel, "Por favor, seleccione un rol antes de continuar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                }
+
+                if ("Estudiante".equals(selectedRole)) {
                     JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(rolPanel);
                     currentFrame.dispose();
 
@@ -30,8 +40,7 @@ public class rol_eleccion {
                     frame.pack();
                     frame.setVisible(true);
 
-                } else if (rol.equalsIgnoreCase("Profesor")) {
-                    // Redirigir a la ventana de registro de profesores
+                } else if ("Profesor".equals(selectedRole)) {
                     JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(rolPanel);
                     currentFrame.dispose();
 
@@ -42,10 +51,48 @@ public class rol_eleccion {
                     frame.setPreferredSize(new Dimension(600, 600));
                     frame.pack();
                     frame.setVisible(true);
-                } else {
-                    // Mostrar mensaje de error si el rol no es válido
-                    JOptionPane.showMessageDialog(null, "Por favor, escriba 'Estudiante' o 'Profesor'.");
+
+                } else if ("Administrador".equals(selectedRole)) {
+                    // Solicitar la clave de administrador
+                    String adminKey = JOptionPane.showInputDialog(rolPanel, "Por favor, ingrese la clave de administrador:");
+
+                    // Verificar si la clave es correcta
+                    String correctAdminKey = "admin123"; // Aquí puedes definir la clave correcta
+
+                    if (adminKey != null && adminKey.equals(correctAdminKey)) {
+                        // Si la clave es correcta, abrir la ventana de registro de administrador
+                        JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(rolPanel);
+                        currentFrame.dispose();
+
+                        JFrame frame = new JFrame("Registro de Administrador");
+                        frame.setContentPane(new register_admin().adminPanel);
+                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                        frame.setSize(600, 600);
+                        frame.setPreferredSize(new Dimension(600, 600));
+                        frame.pack();
+                        frame.setVisible(true);
+
+                    } else {
+                        // Si la clave es incorrecta, mostrar un mensaje de error
+                        JOptionPane.showMessageDialog(rolPanel, "Clave incorrecta. Acceso denegado.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
+            }
+        });
+
+        regresarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(rolPanel);
+                currentFrame.dispose();
+
+                JFrame frame = new JFrame("Login");
+                frame.setContentPane(new login().logPanel);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setSize(600, 600);
+                frame.setPreferredSize(new Dimension(600, 600));
+                frame.pack();
+                frame.setVisible(true);
             }
         });
     }

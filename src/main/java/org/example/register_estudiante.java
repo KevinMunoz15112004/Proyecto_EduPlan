@@ -27,7 +27,7 @@ public class register_estudiante {
         iniciarSesionButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Frame estudianteframe = (JFrame) SwingUtilities.getWindowAncestor(estudiantePanel);
+                JFrame estudianteframe = (JFrame) SwingUtilities.getWindowAncestor(estudiantePanel);
                 estudianteframe.dispose();
 
                 JFrame frame = new JFrame("Login");

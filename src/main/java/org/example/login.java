@@ -82,6 +82,35 @@ public class login {
                             return;
                         }
                     }
+                    // Verificar en la colección "administradores"
+                    MongoCollection<Document> administradoresCollection = database.getCollection("administradores");
+                    Document administrador = administradoresCollection.find(new Document("cedula", cedula)).first();
+
+                    if (administrador != null) {
+                        // Comparar contraseñas
+                        String storedPassword = administrador.getString("password");
+                        if (storedPassword.equals(passwordString)) {
+                            String nombre = administrador.getString("nombre");
+                            JOptionPane.showMessageDialog(null, "Bienvenido, " + nombre + ". Rol: Administrador");
+
+                            // Cerrar la ventana de login
+                            JFrame loginFrame = (JFrame) SwingUtilities.getWindowAncestor(logPanel);
+                            loginFrame.dispose();
+
+                            // Abrir la ventana de administrador
+                            JFrame adminFrame = new JFrame("Interfaz Administrador");
+                            adminFrame.setContentPane(new interfaz_admin().interfazAPanel);
+                            adminFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                            adminFrame.setSize(600, 600);
+                            adminFrame.setPreferredSize(new Dimension(600, 600));
+                            adminFrame.pack();
+                            adminFrame.setVisible(true);
+                            return;
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Contraseña incorrecta.");
+                            return;
+                        }
+                    }
 
                     // Si no se encuentra el usuario en ninguna colección
                     JOptionPane.showMessageDialog(null, "Usuario no encontrado.");
@@ -101,8 +130,8 @@ public class login {
                 JFrame frame = new JFrame("Elección del Rol");
                 frame.setContentPane(new rol_eleccion().rolPanel);
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setSize(600, 600);
-                frame.setPreferredSize(new Dimension(600, 600));
+                frame.setSize(400, 400);
+                frame.setPreferredSize(new Dimension(400, 400));
                 frame.pack();
                 frame.setVisible(true);
             }
