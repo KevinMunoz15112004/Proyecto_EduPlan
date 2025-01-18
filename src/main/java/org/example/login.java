@@ -26,7 +26,7 @@ public class login {
         ingresarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String url = "";
+                String url = "mongodb+srv://kevinmunoz07:mNh1sxHdr4BBBdav@cluster0.sj2qy.mongodb.net/?retryWrites=true&w=majority";
                 String cedula = cedulaText.getText().trim();
                 String passwordString = new String(passwordField1.getPassword());
 
@@ -99,10 +99,10 @@ public class login {
 
                             // Abrir la ventana de administrador
                             JFrame adminFrame = new JFrame("Interfaz Administrador");
-                            adminFrame.setContentPane(new interfaz_admin().interfazAPanel);
+                            adminFrame.setContentPane(new interfaz_admin().interfaz_Admin);
                             adminFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                            adminFrame.setSize(600, 600);
-                            adminFrame.setPreferredSize(new Dimension(600, 600));
+                            adminFrame.setSize(500, 500);
+                            adminFrame.setPreferredSize(new Dimension(500, 500));
                             adminFrame.pack();
                             adminFrame.setVisible(true);
                             return;

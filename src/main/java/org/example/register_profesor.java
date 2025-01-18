@@ -43,7 +43,7 @@ public class register_profesor {
         registrarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String url = "";
+                String url = "mongodb+srv://kevinmunoz07:mNh1sxHdr4BBBdav@cluster0.sj2qy.mongodb.net/?retryWrites=true&w=majority";
                 String cedula = cedulaField.getText().trim();
                 String nombre = nombreField.getText().trim();
                 String materia = materiaField.getText().trim();

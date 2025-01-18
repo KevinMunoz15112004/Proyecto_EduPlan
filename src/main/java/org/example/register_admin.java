@@ -21,7 +21,7 @@ public class register_admin {
         registrarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String url = "";
+                String url = "mongodb+srv://kevinmunoz07:mNh1sxHdr4BBBdav@cluster0.sj2qy.mongodb.net/?retryWrites=true&w=majority";
                 String cedula = cedulaField.getText();
                 String nombre = nombreField.getText();
                 String password = new String(passwordField.getPassword());
