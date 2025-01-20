@@ -22,8 +22,17 @@ public class register_estudiante {
     private JButton registrarButton;
     private JButton iniciarSesionButton;
     public JPanel estudiantePanel;
+    private JComboBox cursoComboBox;
 
     public register_estudiante() {
+        // Opciones del JComboBox
+        cursoComboBox.addItem("8vo");
+        cursoComboBox.addItem("9no");
+        cursoComboBox.addItem("10mo");
+        cursoComboBox.addItem("1roBAC");
+        cursoComboBox.addItem("2doBAC");
+        cursoComboBox.addItem("3roBAC");
+
         iniciarSesionButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -46,8 +55,8 @@ public class register_estudiante {
                 String url = "";
                 String cedula = cedulaField.getText().trim();
                 String nombre = nombreField.getText().trim();
-                String curso = cursoField.getText().trim();
-                String password = new String( passwordField.getPassword());
+                String curso = (String) cursoComboBox.getSelectedItem();
+                String password = new String(passwordField.getPassword());
 
                 // Validar que todos los campos estén llenos
                 if (cedula.isEmpty() || nombre.isEmpty() || curso.isEmpty() || password.isEmpty()) {
@@ -67,12 +76,6 @@ public class register_estudiante {
                     return;
                 }
 
-                // Validar curso: debe estar dentro del rango permitido
-                if (!curso.matches("8vo|9no|10mo|1roB|2doB|3roB")) {
-                    JOptionPane.showMessageDialog(null, "El curso debe ser uno de los siguientes: 8vo, 9no, 10mo, 1roB, 2doB, 3roB.");
-                    return;
-                }
-
                 // Validar contraseña: debe tener al menos 6 caracteres y solo permitir letras y números
                 if (!password.matches("[a-zA-Z0-9]{6,}")) {
                     JOptionPane.showMessageDialog(null, "La contraseña debe tener al menos 6 caracteres y solo puede contener letras y números.");
@@ -81,8 +84,7 @@ public class register_estudiante {
 
                 // Se definen las materias según el curso
                 List<String> materias = new ArrayList<>();
-
-                switch(curso){
+                switch (curso) {
                     case "8vo":
                     case "9no":
                     case "10mo":
@@ -93,8 +95,8 @@ public class register_estudiante {
                         materias.add("Cultura Física");
                         materias.add("Artística");
                         break;
-                    case "1roB":
-                    case "2doB":
+                    case "1roBAC":
+                    case "2doBAC":
                         materias.add("Matemáticas");
                         materias.add("Física");
                         materias.add("Química");
@@ -102,7 +104,7 @@ public class register_estudiante {
                         materias.add("Literatura");
                         materias.add("Historia");
                         break;
-                    case "3roB":
+                    case "3roBAC":
                         materias.add("Matemáticas");
                         materias.add("Física");
                         materias.add("Literatura");
@@ -115,7 +117,7 @@ public class register_estudiante {
                 }
 
                 // Conectar a la base de datos
-                try(MongoClient mongoClient = MongoClients.create(url)){
+                try (MongoClient mongoClient = MongoClients.create(url)) {
                     MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
                     MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");
 
@@ -148,9 +150,8 @@ public class register_estudiante {
                     // Limpiar los campos después del registro
                     cedulaField.setText("");
                     nombreField.setText("");
-                    cursoField.setText("");
                     passwordField.setText("");
-                } catch(Exception ex) {
+                } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Error al registrar el estudiante: " + ex.getMessage());
                     ex.printStackTrace();
                 }

@@ -75,7 +75,16 @@ public class login {
                         String storedPassword = profesor.getString("password");
                         if (storedPassword.equals(passwordString)) {
                             String nombre = profesor.getString("nombre");
-                            JOptionPane.showMessageDialog(null, "Bienvenido, " + nombre + ". Rol: Profesor");
+                            JFrame loginFrame = (JFrame) SwingUtilities.getWindowAncestor(logPanel);
+                            loginFrame.dispose();
+
+                            JFrame frame = new JFrame("Interfaz Estudiante");
+                            frame.setContentPane(new interfaz_profesor(nombre).interfazPPanel);
+                            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                            frame.setSize(400, 400);
+                            frame.setPreferredSize(new Dimension(400, 400));
+                            frame.pack();
+                            frame.setVisible(true);
                             return;
                         } else {
                             JOptionPane.showMessageDialog(null, "Contraseña incorrecta.");

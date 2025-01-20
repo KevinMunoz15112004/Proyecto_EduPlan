@@ -4,8 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
 import java.util.List;
+import java.util.ArrayList;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -21,7 +21,6 @@ public class register_profesor {
     private JButton registrarButton;
     private JButton iniciarSesionButton;
     public JPanel profesorPanel;
-    private JTextField materiaField;
 
     public register_profesor() {
         iniciarSesionButton.addActionListener(new ActionListener() {
@@ -46,7 +45,6 @@ public class register_profesor {
                 String url = "";
                 String cedula = cedulaField.getText().trim();
                 String nombre = nombreField.getText().trim();
-                String materia = materiaField.getText().trim();
                 String password = new String(passwordField.getPassword());
 
                 // Validar que todos los campos estén llenos
@@ -73,15 +71,6 @@ public class register_profesor {
                     return;
                 }
 
-                List<String> materiasValidas = Arrays.asList( "Matemáticas", "Literatura", "Estudios Sociales", "Biología",
-                        "Cultura Física", "Artística", "Física", "Química", "Filosofía",
-                        "Historia", "Economía", "Lectura Crítica");
-
-                if (!materiasValidas.contains(materia)) {
-                    JOptionPane.showMessageDialog(null, "La materia ingresada no se reconoce en la Institución");
-                    return;
-                }
-
                 // Conectar a la base de datos y registrar al profesor
                 try (MongoClient mongoClient = MongoClients.create(url)) {
                     // Conectar a la base de datos y colección
@@ -102,12 +91,28 @@ public class register_profesor {
 
                     int nextProfesorId = (lastProfesor == null) ? 1 : lastProfesor.getInteger("profesor_id") + 1;
 
-                    // Crear el documento con el nuevo profesor_id
+                    // Crear una instancia para obtener las materias seleccionadas
+                    materias_profe materiaFrame = new materias_profe();
+                    JDialog materiaDialog = new JDialog();
+                    materiaDialog.setContentPane(materiaFrame.materiasPanel);
+                    materiaDialog.setSize(300, 400);
+                    materiaDialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    materiaDialog.setModal(true);
+                    materiaDialog.setVisible(true);
+
+                    // Esperar a que el usuario seleccione las materias y cierre la ventana
+                    List<String> materiasSeleccionadas = materiaFrame.getMateriasSeleccionadas();
+                    if (materiasSeleccionadas.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Debe seleccionar al menos una materia.");
+                        return;
+                    }
+
+                    // Crear el documento con el nuevo profesor_id y materias seleccionadas
                     Document profesor = new Document("profesor_id", nextProfesorId)
                             .append("cedula", cedula)
                             .append("nombre", nombre)
-                            .append("materia", materia)
-                            .append("password", password);
+                            .append("password", password)
+                            .append("materias", materiasSeleccionadas);  // Agregar las materias seleccionadas
 
                     // Insertar el documento en la base de datos
                     collection.insertOne(profesor);
@@ -116,7 +121,6 @@ public class register_profesor {
                     // Limpiar los campos después del registro
                     cedulaField.setText("");
                     nombreField.setText("");
-                    materiaField.setText("");
                     passwordField.setText("");
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Error al guardar en la base de datos: " + ex.getMessage());
@@ -124,5 +128,45 @@ public class register_profesor {
                 }
             }
         });
+    }
+
+    // Clase interna para mostrar las materias
+    public class materias_profe {
+        public JPanel materiasPanel;
+        private List<String> materiasSeleccionadas;
+
+        public materias_profe() {
+            materiasPanel = new JPanel();
+            materiasPanel.setLayout(new BoxLayout(materiasPanel, BoxLayout.Y_AXIS));
+
+            String[] materias = {"Matemáticas", "Literatura", "Estudios Sociales", "Biología", "Cultura Física",
+                    "Artística", "Física", "Química", "Filosofía", "Historia", "Lectura Crítica", "Economía"};
+            JCheckBox[] checkBoxes = new JCheckBox[materias.length];
+
+            for (int i = 0; i < materias.length; i++) {
+                checkBoxes[i] = new JCheckBox(materias[i]);
+                materiasPanel.add(checkBoxes[i]);
+            }
+
+            JButton aceptarButton = new JButton("Aceptar");
+            aceptarButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    materiasSeleccionadas = new ArrayList<>();
+                    for (JCheckBox checkBox : checkBoxes) {
+                        if (checkBox.isSelected()) {
+                            materiasSeleccionadas.add(checkBox.getText());
+                        }
+                    }
+                    // Cerrar la ventana después de seleccionar las materias
+                    ((JDialog) SwingUtilities.getWindowAncestor(materiasPanel)).dispose();
+                }
+            });
+            materiasPanel.add(aceptarButton);
+        }
+
+        public List<String> getMateriasSeleccionadas() {
+            return materiasSeleccionadas;
+        }
     }
 }
