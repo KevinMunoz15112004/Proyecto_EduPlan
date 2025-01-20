@@ -44,7 +44,7 @@ public class tabla_pEstudiantes {
     }
 
     private void cargarDatos(String nombreProfesor, DefaultTableModel tableModel) {
-        String url = "mongodb+srv://kevinmunoz07:mNh1sxHdr4BBBdav@cluster0.sj2qy.mongodb.net/?retryWrites=true&w=majority";
+        String url = "";
         try (MongoClient mongoClient = MongoClients.create(url)) {
             MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
 

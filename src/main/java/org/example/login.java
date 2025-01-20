@@ -26,7 +26,7 @@ public class login {
         ingresarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String url = "mongodb+srv://kevinmunoz07:mNh1sxHdr4BBBdav@cluster0.sj2qy.mongodb.net/?retryWrites=true&w=majority";
+                String url = "";
                 String cedula = cedulaText.getText().trim();
                 String passwordString = new String(passwordField1.getPassword());
 
