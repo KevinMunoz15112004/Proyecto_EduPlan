@@ -10,13 +10,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-public class tabla_pEstudiantes {
+public class tabla_pEstudianteA {
     private JTable table1;
     private JButton elegirEstudianteButton;
     private JButton regresarButton;
-    public JPanel interfazTablaP;
+    public JPanel tablaPEstudianteA;
 
-    public tabla_pEstudiantes(String nombreProfesor) {
+    public tabla_pEstudianteA(String nombreProfesor) {
         // Configurar columnas de la tabla
         String[] columnNames = {"ID", "Cédula", "Nombre", "Curso"};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
@@ -28,7 +28,7 @@ public class tabla_pEstudiantes {
         regresarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(interfazTablaP);
+                JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(tablaPEstudianteA);
                 currentFrame.dispose();
 
                 JFrame frame = new JFrame("Login");
@@ -49,12 +49,13 @@ public class tabla_pEstudiantes {
                 if (selectedRow != -1) {
                     String nombreEstudiante = table1.getValueAt(selectedRow, 2).toString();
                     String cedulaEstudiante = table1.getValueAt(selectedRow, 1).toString();
-                    registrarNotas(nombreEstudiante, cedulaEstudiante, nombreProfesor);
+                    registrarAsistencia(nombreEstudiante, cedulaEstudiante, nombreProfesor);
                 } else {
                     JOptionPane.showMessageDialog(null, "Por favor, seleccione un estudiante.");
                 }
             }
         });
+
     }
 
     private void cargarDatos(String nombreProfesor, DefaultTableModel tableModel) {
@@ -68,7 +69,7 @@ public class tabla_pEstudiantes {
 
             if (profesor != null) {
                 // Obtener las materias del profesor
-                List<String> listaMateriasProfesor = profesor.getList("materias", String.class);
+                java.util.List<String> listaMateriasProfesor = profesor.getList("materias", String.class);
 
                 // Obtener la colección de estudiantes
                 MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");
@@ -89,7 +90,7 @@ public class tabla_pEstudiantes {
                         Object[] row = {userId, cedula, nombre, curso};
                         tableModel.addRow(row);
                     }
-                }   
+                }
             } else {
                 JOptionPane.showMessageDialog(null, "No se encontró al profesor con el nombre: " + nombreProfesor);
             }
@@ -99,7 +100,7 @@ public class tabla_pEstudiantes {
         }
     }
 
-    private void registrarNotas(String nombreEstudiante, String cedulaEstudiante, String nombreProfesor) {
+    private void registrarAsistencia(String nombreEstudiante, String cedulaEstudiante, String nombreProfesor) {
         // Obtener las materias comunes entre el profesor y el estudiante
         String url = "";
         try (MongoClient mongoClient = MongoClients.create(url)) {
@@ -126,30 +127,30 @@ public class tabla_pEstudiantes {
 
                 // Mostrar un cuadro de diálogo para cada materia común
                 for (String materia : materiasComunes) {
-                    String nota = JOptionPane.showInputDialog(null,
-                            "Ingrese la nota para la materia: " + materia,
-                            "Registrar Nota", JOptionPane.QUESTION_MESSAGE);
+                    String asistencia = JOptionPane.showInputDialog(null,
+                            "Ingrese la Asistencia para la materia: " + materia,
+                            "Registrar Asistencia", JOptionPane.QUESTION_MESSAGE);
 
-                    if (nota != null && !nota.isEmpty()) {
+                    if (asistencia != null && !asistencia.isEmpty()) {
                         // Validar el formato de la nota (hasta dos decimales)
-                        if (NotaValida(nota)) {
+                        if (NotaValida(asistencia)) {
                             // Obtener el índice de la materia
                             int materiaIndex = materiasEstudiante.indexOf(materia);
 
-                            // Convertir la nota a tipo Double
-                            double notaDouble = Double.parseDouble(nota);
+                            // Nota a tipo INT
+                            int asistenciaRegistro = Integer.parseInt(asistencia);
 
                             // Actualizar el arreglo de notas del estudiante
-                            List<Double> notasEstudiante = estudiante.getList("notas", Double.class);
-                            notasEstudiante.set(materiaIndex, notaDouble);
+                            List<Integer> notasEstudiante = estudiante.getList("asistencias", Integer.class);
+                            notasEstudiante.set(materiaIndex, asistenciaRegistro);
 
                             // Actualizar el documento en la base de datos
-                            Document updatedStudent = new Document("notas", notasEstudiante);
+                            Document updatedStudent = new Document("asistencias", notasEstudiante);
                             estudiantesCollection.updateOne(new Document("cedula", cedulaEstudiante), new Document("$set", updatedStudent));
 
-                            JOptionPane.showMessageDialog(null, "Nota registrada correctamente.");
+                            JOptionPane.showMessageDialog(null, "Asistencia registrada correctamente.");
                         } else {
-                            JOptionPane.showMessageDialog(null, "La nota no es válida. Debe tener hasta dos decimales.");
+                            JOptionPane.showMessageDialog(null, "La Asistencia no es válida. Debe ser un entero.");
                         }
                     } else {
                         // Si se cancela o se cierra el cuadro de entrada, salimos
@@ -165,10 +166,10 @@ public class tabla_pEstudiantes {
         }
     }
 
-    private boolean NotaValida(String nota) {
+    private boolean NotaValida(String asistencia) {
         try {
-            // Verifica si el formato es un número con hasta dos decimales
-            return nota.matches("\\d{1,2}\\.\\d{2}");
+            // Verifica si el número es un entero sin decimales y de hasta 100 dígitos
+            return asistencia.matches("\\d{1,100}");
         } catch (Exception ex) {
             return false;
         }

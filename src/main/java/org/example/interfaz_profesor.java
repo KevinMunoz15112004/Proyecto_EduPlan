@@ -47,10 +47,26 @@ public class interfaz_profesor {
             }
         });
 
-        registrarAsistenciaButton.addActionListener(new ActionListener() {
+        registrarNotaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+            }
+        });
+        registrarAsistenciaButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame estudianteframe = (JFrame) SwingUtilities.getWindowAncestor(interfazPPanel);
+                estudianteframe.dispose();
+
+                JFrame frame = new JFrame("Login");
+                frame.setContentPane(new tabla_pEstudianteA(nombre).tablaPEstudianteA);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setSize(600, 600);
+                frame.setPreferredSize(new Dimension(600, 600));
+                frame.pack();
+                frame.setVisible(true);
             }
         });
     }

@@ -82,8 +82,11 @@ public class register_estudiante {
                     return;
                 }
 
-                // Se definen las materias según el curso
+                // Se definen las materias, notas y asistencias según el curso
                 List<String> materias = new ArrayList<>();
+                List<Double> notas = new ArrayList<>();
+                List<Integer> asistencias = new ArrayList<>();
+
                 switch (curso) {
                     case "8vo":
                     case "9no":
@@ -116,6 +119,15 @@ public class register_estudiante {
                         break;
                 }
 
+                // Inicializar las notas y asistencias con 0 para cada materia
+                for (int i = 0; i < materias.size(); i++) {
+                    notas.add(0.0);
+                }
+
+                for (int j = 0; j < materias.size(); j++) {
+                    asistencias.add(0);
+                }
+
                 // Conectar a la base de datos
                 try (MongoClient mongoClient = MongoClients.create(url)) {
                     MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
@@ -135,13 +147,15 @@ public class register_estudiante {
 
                     int nextUserId = (lastStudent == null) ? 1 : lastStudent.getInteger("user_id") + 1;
 
-                    // Crear el documento para insertar
+                    // Crear el documento para insertar, con el campo "notas"
                     Document estudiante = new Document("user_id", nextUserId)
                             .append("cedula", cedula)
                             .append("nombre", nombre)
                             .append("curso", curso)
                             .append("password", password)
-                            .append("materias", materias);
+                            .append("materias", materias)
+                            .append("notas", notas)
+                            .append("asistencias", asistencias);
 
                     // Insertar el documento en la colección
                     estudiantesCollection.insertOne(estudiante);
