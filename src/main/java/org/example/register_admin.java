@@ -50,7 +50,6 @@ public class register_admin {
                     return;
                 }
 
-
                 try (MongoClient mongoClient = MongoClients.create(url)) {
                     MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
                     MongoCollection<Document> administradoresCollection = database.getCollection("administradores");

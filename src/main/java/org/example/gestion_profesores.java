@@ -8,6 +8,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class gestion_profesores {
     private JTable table1;
@@ -167,7 +168,17 @@ public class gestion_profesores {
                 int userId = profesor.getInteger("profesor_id");
                 String cedula = profesor.getString("cedula");
                 String nombre = profesor.getString("nombre");
-                String curso = profesor.getString("materia");
+
+                // Obtener materias como lista (si es un array)
+                Object materiasObject = profesor.get("materias");
+                String curso = "";
+                if (materiasObject instanceof ArrayList) {
+                    ArrayList<String> materiasList = (ArrayList<String>) materiasObject;
+                    curso = String.join(", ", materiasList); // Unir las materias en una cadena separada por comas
+                } else if (materiasObject instanceof String) {
+                    curso = (String) materiasObject; // Si por alguna razón es un solo string
+                }
+
                 String password = profesor.getString("password");
 
                 // Agregar los datos a la tabla
@@ -179,6 +190,7 @@ public class gestion_profesores {
             ex.printStackTrace();
         }
     }
+
 
     private void eliminarUsuario(int userId) {
         String url = "";

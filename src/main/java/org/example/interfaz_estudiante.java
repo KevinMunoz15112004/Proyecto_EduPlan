@@ -42,7 +42,16 @@ public class interfaz_estudiante {
         verHorarioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(interfazEPanel);
+                currentFrame.dispose();
 
+                JFrame frame = new JFrame("Login");
+                frame.setContentPane(new horario_estudiante(nombre).horario);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setSize(600, 600);
+                frame.setPreferredSize(new Dimension(600, 600));
+                frame.pack();
+                frame.setVisible(true);
             }
         });
 

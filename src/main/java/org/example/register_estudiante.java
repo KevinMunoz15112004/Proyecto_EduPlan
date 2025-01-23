@@ -82,15 +82,11 @@ public class register_estudiante {
                     return;
                 }
 
-                // Se definen las materias, notas y asistencias según el curso
+                // Se definen las materias según el curso
                 List<String> materias = new ArrayList<>();
-                List<Double> notas = new ArrayList<>();
-                List<Integer> asistencias = new ArrayList<>();
-
                 switch (curso) {
                     case "8vo":
                     case "9no":
-                    case "10mo":
                         materias.add("Matemáticas");
                         materias.add("Literatura");
                         materias.add("Estudios Sociales");
@@ -119,16 +115,18 @@ public class register_estudiante {
                         break;
                 }
 
+                // Generar el horario
+                List<String> horario = generarHorario(materias, curso);
+
                 // Inicializar las notas y asistencias con 0 para cada materia
+                List<Double> notas = new ArrayList<>();
+                List<Integer> asistencias = new ArrayList<>();
                 for (int i = 0; i < materias.size(); i++) {
                     notas.add(0.0);
-                }
-
-                for (int j = 0; j < materias.size(); j++) {
                     asistencias.add(0);
                 }
 
-                // Conectar a la base de datos
+                // Conectar a la base de datos y registrar al estudiante con su horario
                 try (MongoClient mongoClient = MongoClients.create(url)) {
                     MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
                     MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");
@@ -144,10 +142,9 @@ public class register_estudiante {
                     Document lastStudent = estudiantesCollection.find()
                             .sort(descending("user_id"))
                             .first();
-
                     int nextUserId = (lastStudent == null) ? 1 : lastStudent.getInteger("user_id") + 1;
 
-                    // Crear el documento para insertar, con el campo "notas"
+                    // Crear el documento para insertar, incluyendo el horario
                     Document estudiante = new Document("user_id", nextUserId)
                             .append("cedula", cedula)
                             .append("nombre", nombre)
@@ -155,7 +152,8 @@ public class register_estudiante {
                             .append("password", password)
                             .append("materias", materias)
                             .append("notas", notas)
-                            .append("asistencias", asistencias);
+                            .append("asistencias", asistencias)
+                            .append("horario", horario); // Agregar el horario
 
                     // Insertar el documento en la colección
                     estudiantesCollection.insertOne(estudiante);
@@ -171,5 +169,31 @@ public class register_estudiante {
                 }
             }
         });
+    }
+
+    // Función para generar el horario automáticamente
+    private List<String> generarHorario(List<String> materias, String curso) {
+        // Definir las franjas horarias
+        String[] horas = {"7:00-8:30", "8:30-10:00", "10:00-11:30", "11:30-13:00", "14:00-15:30", "15:30-17:00", "17:00-18:30"};
+        List<String> horario = new ArrayList<>();
+
+        // Definir los días de la semana
+        String[] dias = {"1", "2", "3", "4", "5"};
+
+        // Crear una estructura para los horarios
+        for (String dia : dias) {
+            StringBuilder diaHorario = new StringBuilder(dia + ": ");
+
+            // Asignar materias a horas sin repetir
+            for (String materia : materias) {
+                // Asignar una hora aleatoria a la materia (no repetir)
+                String hora = horas[(int) (Math.random() * horas.length)];
+                diaHorario.append(materia + " (" + hora + "), ");
+            }
+
+            horario.add(diaHorario.toString().replaceAll(", $", "")); // Eliminar la coma final
+        }
+
+        return horario;
     }
 }
