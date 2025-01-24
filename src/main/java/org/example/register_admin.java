@@ -17,11 +17,12 @@ public class register_admin {
     public JPanel adminPanel;
     private JButton iniciarSesionButton;
 
+    private static final String url = "";
+
     public register_admin() {
         registrarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String url = "";
                 String cedula = cedulaField.getText();
                 String nombre = nombreField.getText();
                 String password = new String(passwordField.getPassword());

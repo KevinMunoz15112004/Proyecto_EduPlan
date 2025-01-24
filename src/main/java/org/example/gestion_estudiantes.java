@@ -16,6 +16,8 @@ public class gestion_estudiantes {
     private JButton actualizarButton;
     private JButton regresarButton;
 
+    private static final String url = "";
+
     public gestion_estudiantes() {
         // Establecer las columnas de la tabla
         String[] columnNames = {"ID", "Cédula", "Nombre", "Curso", "Contraseña"};
@@ -53,7 +55,9 @@ public class gestion_estudiantes {
                     String nuevaCedula = null;
                     while (nuevaCedula == null || nuevaCedula.trim().isEmpty()) {
                         nuevaCedula = JOptionPane.showInputDialog("Nueva cédula:");
-                        if (nuevaCedula == null || nuevaCedula.trim().isEmpty()) {
+                        if (nuevaCedula == null){
+                            return;
+                        } else if (nuevaCedula.trim().isEmpty()) {
                             JOptionPane.showMessageDialog(null, "Debe ingresar una cédula.");
                         } else if (!nuevaCedula.matches("\\d{10}")) {
                             JOptionPane.showMessageDialog(null, "La cédula debe tener 10 dígitos numéricos.");
@@ -64,7 +68,9 @@ public class gestion_estudiantes {
                     String nuevoNombre = null;
                     while (nuevoNombre == null || nuevoNombre.trim().isEmpty()) {
                         nuevoNombre = JOptionPane.showInputDialog("Nuevo nombre:");
-                        if (nuevoNombre == null || nuevoNombre.trim().isEmpty()) {
+                        if (nuevoNombre == null){
+                            return;
+                        } else if (nuevoNombre.trim().isEmpty()) {
                             JOptionPane.showMessageDialog(null, "Debe ingresar un nombre.");
                         } else if (!nuevoNombre.matches("[A-Za-záéíóúÁÉÍÓÚñÑ\\s]+")) {
                             JOptionPane.showMessageDialog(null, "El nombre no debe contener números ni caracteres especiales.");
@@ -88,7 +94,9 @@ public class gestion_estudiantes {
                     String nuevoPassword = null;
                     while (nuevoPassword == null || nuevoPassword.trim().isEmpty()) {
                         nuevoPassword = JOptionPane.showInputDialog("Nueva Contraseña:");
-                        if (nuevoPassword == null || nuevoPassword.trim().isEmpty()) {
+                        if (nuevoPassword == null){
+                            return;
+                        } else if (nuevoPassword.trim().isEmpty()) {
                             JOptionPane.showMessageDialog(null, "Debe ingresar una contraseña.");
                         } else if (nuevoPassword.length() < 6) {
                             JOptionPane.showMessageDialog(null, "La contraseña debe tener al menos 6 caracteres.");
@@ -117,8 +125,8 @@ public class gestion_estudiantes {
                 JFrame frame = new JFrame("Gestión Estudiantes");
                 frame.setContentPane(new interfaz_admin().interfaz_Admin);
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setSize(600, 600);
-                frame.setPreferredSize(new Dimension(600, 600));
+                frame.setSize(400, 400);
+                frame.setPreferredSize(new Dimension(400, 400));
                 frame.pack();
                 frame.setVisible(true);
             }
@@ -126,7 +134,6 @@ public class gestion_estudiantes {
     }
 
     private void cargarDatos(DefaultTableModel tableModel) {
-        String url = "";
         try (MongoClient mongoClient = MongoClients.create(url)) {
             MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
             MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");
@@ -153,7 +160,6 @@ public class gestion_estudiantes {
     }
 
     private void eliminarUsuario(int userId) {
-        String url = "";
         try (MongoClient mongoClient = MongoClients.create(url)) {
             MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
             MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");
@@ -167,7 +173,6 @@ public class gestion_estudiantes {
     }
 
     private void actualizarUsuario(int userId, String nuevoNombre, String nuevoCurso, String nuevaCedula, String nuevaContraseña) {
-        String url = "";
         try (MongoClient mongoClient = MongoClients.create(url)) {
             MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
             MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");
@@ -188,7 +193,6 @@ public class gestion_estudiantes {
     }
 
     private void reorganizarUserIds() {
-        String url = "";
         try (MongoClient mongoClient = MongoClients.create(url)) {
             MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
             MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");

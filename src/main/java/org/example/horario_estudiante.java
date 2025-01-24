@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.table.DefaultTableModel;
+
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
@@ -18,8 +19,9 @@ public class horario_estudiante {
     private JButton regresarButton;
     public JPanel horario;
 
+    private static final String url = "";
+
     public horario_estudiante(String nombreEstudiante) {
-        String url = "";
         // Crear el modelo de la tabla
         DefaultTableModel model = new DefaultTableModel();
 

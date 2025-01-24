@@ -22,11 +22,12 @@ public class login {
     public JPanel logPanel;
     private JButton ingresarButton;
 
+    private static final String url = "";
+
     public login() {
         ingresarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String url = "";
                 String cedula = cedulaText.getText().trim();
                 String passwordString = new String(passwordField1.getPassword());
 

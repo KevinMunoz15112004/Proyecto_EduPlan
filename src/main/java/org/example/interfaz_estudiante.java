@@ -35,7 +35,16 @@ public class interfaz_estudiante {
         verCalificacionesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(interfazEPanel);
+                currentFrame.dispose();
 
+                JFrame frame = new JFrame("Login");
+                frame.setContentPane(new notas_estudiante(nombre).notasPanel);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setSize(600, 300);
+                frame.setPreferredSize(new Dimension(600, 300));
+                frame.pack();
+                frame.setVisible(true);
             }
         });
 
@@ -48,8 +57,8 @@ public class interfaz_estudiante {
                 JFrame frame = new JFrame("Login");
                 frame.setContentPane(new horario_estudiante(nombre).horario);
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setSize(600, 600);
-                frame.setPreferredSize(new Dimension(600, 600));
+                frame.setSize(600, 300);
+                frame.setPreferredSize(new Dimension(600, 300));
                 frame.pack();
                 frame.setVisible(true);
             }
@@ -58,7 +67,16 @@ public class interfaz_estudiante {
         consultaDeAsistenciasButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(interfazEPanel);
+                currentFrame.dispose();
 
+                JFrame frame = new JFrame("Login");
+                frame.setContentPane(new asistencia_estudiante(nombre).asistenciaPanel);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setSize(600, 300);
+                frame.setPreferredSize(new Dimension(600, 300));
+                frame.pack();
+                frame.setVisible(true);
             }
         });
 

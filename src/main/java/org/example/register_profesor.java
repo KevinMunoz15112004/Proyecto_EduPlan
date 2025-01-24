@@ -22,6 +22,8 @@ public class register_profesor {
     private JButton iniciarSesionButton;
     public JPanel profesorPanel;
 
+    private static final String url = "";
+
     public register_profesor() {
         iniciarSesionButton.addActionListener(new ActionListener() {
             @Override
@@ -42,7 +44,6 @@ public class register_profesor {
         registrarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String url = "";
                 String cedula = cedulaField.getText().trim();
                 String nombre = nombreField.getText().trim();
                 String password = new String(passwordField.getPassword());

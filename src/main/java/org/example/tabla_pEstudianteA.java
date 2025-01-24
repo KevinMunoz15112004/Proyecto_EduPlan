@@ -16,6 +16,8 @@ public class tabla_pEstudianteA {
     private JButton regresarButton;
     public JPanel tablaPEstudianteA;
 
+    private static final String url = "";
+
     public tabla_pEstudianteA(String nombreProfesor) {
         // Configurar columnas de la tabla
         String[] columnNames = {"ID", "Cédula", "Nombre", "Curso"};
@@ -34,8 +36,8 @@ public class tabla_pEstudianteA {
                 JFrame frame = new JFrame("Login");
                 frame.setContentPane(new interfaz_profesor(nombreProfesor).interfazPPanel);
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setSize(600, 600);
-                frame.setPreferredSize(new Dimension(600, 600));
+                frame.setSize(400, 400);
+                frame.setPreferredSize(new Dimension(400, 400));
                 frame.pack();
                 frame.setVisible(true);
             }
@@ -59,7 +61,6 @@ public class tabla_pEstudianteA {
     }
 
     private void cargarDatos(String nombreProfesor, DefaultTableModel tableModel) {
-        String url = "";
         try (MongoClient mongoClient = MongoClients.create(url)) {
             MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
 
@@ -102,7 +103,6 @@ public class tabla_pEstudianteA {
 
     private void registrarAsistencia(String nombreEstudiante, String cedulaEstudiante, String nombreProfesor) {
         // Obtener las materias comunes entre el profesor y el estudiante
-        String url = "";
         try (MongoClient mongoClient = MongoClients.create(url)) {
             MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
 

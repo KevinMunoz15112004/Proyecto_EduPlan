@@ -24,6 +24,8 @@ public class register_estudiante {
     public JPanel estudiantePanel;
     private JComboBox cursoComboBox;
 
+    private static final String url = "";
+
     public register_estudiante() {
         // Opciones del JComboBox
         cursoComboBox.addItem("8vo");
@@ -52,7 +54,6 @@ public class register_estudiante {
         registrarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String url = "";
                 String cedula = cedulaField.getText().trim();
                 String nombre = nombreField.getText().trim();
                 String curso = (String) cursoComboBox.getSelectedItem();
