@@ -182,7 +182,7 @@ public class gestion_estudiantes {
                     .append("cedula", nuevaCedula)
                     .append("nombre", nuevoNombre)
                     .append("curso", nuevoCurso)
-                    .append("contrasena", nuevaContraseña);
+                    .append("password", nuevaContraseña);
 
             // Actualizar el documento en la base de datos
             estudiantesCollection.updateOne(new Document("user_id", userId), new Document("$set", updatedDocument));
