@@ -36,8 +36,8 @@ public class tabla_pEstudianteA {
                 JFrame frame = new JFrame("Login");
                 frame.setContentPane(new interfaz_profesor(nombreProfesor).interfazPPanel);
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setSize(400, 400);
-                frame.setPreferredSize(new Dimension(400, 400));
+                frame.setSize(400, 300);
+                frame.setPreferredSize(new Dimension(400, 300));
                 frame.pack();
                 frame.setVisible(true);
             }

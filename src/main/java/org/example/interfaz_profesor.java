@@ -10,7 +10,6 @@ public class interfaz_profesor {
     public JPanel interfazPPanel;
     private JButton registrarNotaButton;
     private JButton registrarAsistenciaButton;
-    private JButton descargarReporteButton;
     private JButton cerrarSesionButton;
 
     public interfaz_profesor(String nombre) {
@@ -47,14 +46,7 @@ public class interfaz_profesor {
             }
         });
 
-        registrarNotaButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
         registrarAsistenciaButton.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFrame estudianteframe = (JFrame) SwingUtilities.getWindowAncestor(interfazPPanel);

@@ -82,8 +82,8 @@ public class login {
                             JFrame frame = new JFrame("Interfaz Estudiante");
                             frame.setContentPane(new interfaz_profesor(nombre).interfazPPanel);
                             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                            frame.setSize(400, 400);
-                            frame.setPreferredSize(new Dimension(400, 400));
+                            frame.setSize(400, 300);
+                            frame.setPreferredSize(new Dimension(400, 300));
                             frame.pack();
                             frame.setVisible(true);
                             return;

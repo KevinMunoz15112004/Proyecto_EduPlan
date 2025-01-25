@@ -88,6 +88,7 @@ public class register_estudiante {
                 switch (curso) {
                     case "8vo":
                     case "9no":
+                    case "10mo":
                         materias.add("Matemáticas");
                         materias.add("Literatura");
                         materias.add("Estudios Sociales");
