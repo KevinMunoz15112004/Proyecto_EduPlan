@@ -37,11 +37,11 @@ public class login {
                     return;
                 }
 
-                // Conectar a MongoDB y verificar credenciales
+                // Conectar a Mongo y comprobar credenciales
                 try (MongoClient mongoClient = MongoClients.create(url)) {
                     MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
 
-                    // Verificar primero en la colección "estudiantes"
+                    // Verificación en la colección estudiantes
                     MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");
                     Document estudiante = estudiantesCollection.find(new Document("cedula", cedula)).first();
 
@@ -67,7 +67,7 @@ public class login {
                         }
                     }
 
-                    // Verificar en la colección "profesores"
+                    // Verificación en la colección profesores
                     MongoCollection<Document> profesoresCollection = database.getCollection("profesores");
                     Document profesor = profesoresCollection.find(new Document("cedula", cedula)).first();
 
@@ -92,7 +92,7 @@ public class login {
                             return;
                         }
                     }
-                    // Verificar en la colección "administradores"
+                    // Verificación en la colección administradores
                     MongoCollection<Document> administradoresCollection = database.getCollection("administradores");
                     Document administrador = administradoresCollection.find(new Document("cedula", cedula)).first();
 
@@ -102,12 +102,9 @@ public class login {
                         if (storedPassword.equals(passwordString)) {
                             String nombre = administrador.getString("nombre");
                             JOptionPane.showMessageDialog(null, "Bienvenido, " + nombre + ". Rol: Administrador");
-
-                            // Cerrar la ventana de login
                             JFrame loginFrame = (JFrame) SwingUtilities.getWindowAncestor(logPanel);
                             loginFrame.dispose();
 
-                            // Abrir la ventana de administrador
                             JFrame adminFrame = new JFrame("Interfaz Administrador");
                             adminFrame.setContentPane(new interfaz_admin().interfaz_Admin);
                             adminFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -122,7 +119,7 @@ public class login {
                         }
                     }
 
-                    // Si no se encuentra el usuario en ninguna colección
+                    // Si no se encuentra el usuario en ninguna colección, se mostrará un mensaje
                     JOptionPane.showMessageDialog(null, "Usuario no encontrado.");
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Error al verificar las credenciales: " + ex.getMessage());

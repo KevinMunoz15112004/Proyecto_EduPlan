@@ -23,12 +23,12 @@ public class notas_estudiante {
     private static final String cN = "notas";
 
     public notas_estudiante(String nombre) {
-        // Configuración inicial del JTable
+        // Configuraciónd el Jtable
         String[] columnNames = {"Materias", "Nota"};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
         table1.setModel(tableModel);
 
-        // Cargar los datos desde la base de datos
+        // Cargar los datos desde la base
         cargarNotas(nombre, tableModel);
 
         regresarButton.addActionListener(new ActionListener() {
@@ -49,7 +49,7 @@ public class notas_estudiante {
     }
 
     public void cargarNotas(String nombre, DefaultTableModel tableModel) {
-        // Conexión a MongoDB
+        // Conexión a Mongo
         try(MongoClient mongoClient = MongoClients.create(url)){
             MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
             MongoCollection<Document> nota = database.getCollection("estudiantes");

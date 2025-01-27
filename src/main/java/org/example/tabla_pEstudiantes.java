@@ -105,14 +105,14 @@ public class tabla_pEstudiantes {
         try (MongoClient mongoClient = MongoClients.create(url)) {
             MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
 
-            // Obtener la colección de profesores
+            // Obteneción de la colección de profesores
             MongoCollection<Document> profesoresCollection = database.getCollection("profesores");
             Document profesor = profesoresCollection.find(new Document("nombre", nombreProfesor)).first();
 
-            // Obtener las materias del profesor
+            // Obtención de las materias del profesor
             List<String> listaMateriasProfesor = profesor.getList("materias", String.class);
 
-            // Obtener la colección de estudiantes
+            // Obtención la colección de estudiantes
             MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");
             Document estudiante = estudiantesCollection.find(new Document("cedula", cedulaEstudiante)).first();
 
@@ -124,14 +124,14 @@ public class tabla_pEstudiantes {
                         .filter(materiasEstudiante::contains)
                         .toList();
 
-                // Mostrar un cuadro de diálogo para cada materia común
+                // Cuadro de diálogo para cada materia común
                 for (String materia : materiasComunes) {
                     String nota = JOptionPane.showInputDialog(null,
                             "Ingrese la nota para la materia: " + materia,
                             "Registrar Nota", JOptionPane.QUESTION_MESSAGE);
 
                     if (nota != null && !nota.isEmpty()) {
-                        // Validar el formato de la nota (hasta dos decimales)
+                        // Validación  del formato de la nota (hasta dos decimales)
                         if (NotaValida(nota)) {
                             // Obtener el índice de la materia
                             int materiaIndex = materiasEstudiante.indexOf(materia);
@@ -152,8 +152,7 @@ public class tabla_pEstudiantes {
                             JOptionPane.showMessageDialog(null, "La nota no es válida. Debe tener hasta dos decimales.");
                         }
                     } else {
-                        // Si se cancela o se cierra el cuadro de entrada, salimos
-                        break;
+                        break;  // Si se cancela o se cierra el cuadro de entrada, se sale
                     }
                 }
             } else {

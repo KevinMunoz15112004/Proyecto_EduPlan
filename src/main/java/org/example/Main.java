@@ -5,6 +5,8 @@ import java.awt.*;
 
 public class Main {
     public static void main(String[] args) {
+
+        // Llamada a la ventana principal del Login
         JFrame frame = new JFrame("Login");
         frame.setContentPane(new login().logPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

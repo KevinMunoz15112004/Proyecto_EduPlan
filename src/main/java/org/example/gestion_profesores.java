@@ -8,7 +8,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.List;
 
 public class gestion_profesores {
     private JTable table1;
@@ -20,7 +20,7 @@ public class gestion_profesores {
     private static final String url = "";
 
     public gestion_profesores() {
-        // Establecer las columnas de la tabla
+        // Establecer las columnas de la tabla para el JTable
         String[] columnNames = {"ID", "Cédula", "Nombre", "Materia(s)", "Contraseña"};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
         table1.setModel(tableModel);
@@ -36,7 +36,7 @@ public class gestion_profesores {
                     int userId = (int) table1.getValueAt(selectedRow, 0);
                     eliminarUsuario(userId);
                     tableModel.removeRow(selectedRow);
-                    reorganizarUserIds(); // Reorganizar el user_id tras eliminar
+                    reorganizarUserIds(); // Reorganizar el id tras eliminar
                 } else {
                     JOptionPane.showMessageDialog(null, "Seleccione un usuario para eliminar.");
                 }
@@ -78,7 +78,7 @@ public class gestion_profesores {
                         }
                     }
 
-                    // Mostrar JCheckBox para seleccionar materias
+                    // Se crea un JCheckBox para seleccionar materias
                     String[] materias = {"Matemáticas", "Literatura", "Estudios Sociales", "Biología", "Cultura Física",
                             "Artística", "Física", "Química", "Filosofía", "Historia", "Lectura Crítica", "Economía"};
                     JCheckBox[] checkBoxes = new JCheckBox[materias.length];
@@ -109,7 +109,7 @@ public class gestion_profesores {
 
                         if (materiasSeleccionadas.length() == 0) {
                             JOptionPane.showMessageDialog(null, "Debe seleccionar al menos una materia.");
-                            // Repetir la selección de materias
+                            // Repetir la selección de materias hasta que se elija una o más
                             result = JOptionPane.showConfirmDialog(null, panel, "Seleccione las materias",
                                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
                             if (result != JOptionPane.OK_OPTION) {
@@ -171,17 +171,16 @@ public class gestion_profesores {
             MongoCursor<Document> cursor = estudiantesCollection.find().iterator();
             while (cursor.hasNext()) {
                 Document profesor = cursor.next();
-                // Usar user_id en lugar de _id
                 int userId = profesor.getInteger("profesor_id");
                 String cedula = profesor.getString("cedula");
                 String nombre = profesor.getString("nombre");
 
-                // Obtener materias como lista (si es un array)
+                // Obtener materias como lista
                 Object materiasObject = profesor.get("materias");
                 String curso = "";
-                if (materiasObject instanceof ArrayList) {
-                    ArrayList<String> materiasList = (ArrayList<String>) materiasObject;
-                    curso = String.join(", ", materiasList); // Unir las materias en una cadena separada por comas
+                if (materiasObject instanceof List) {
+                    List<String> materiasList = (List<String>) materiasObject;
+                    curso = String.join(", ", materiasList); // Se unen las materias en una cadena separada por comas
                 } else if (materiasObject instanceof String) {
                     curso = (String) materiasObject; // Si por alguna razón es un solo string
                 }

@@ -79,7 +79,6 @@ public class register_admin {
                     administradoresCollection.insertOne(newAdmin);
                     JOptionPane.showMessageDialog(null, "Administrador registrado con éxito!");
 
-                    // Limpiar los campos después de registrar
                     cedulaField.setText("");
                     nombreField.setText("");
                     passwordField.setText("");

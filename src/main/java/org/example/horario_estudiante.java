@@ -5,14 +5,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.table.DefaultTableModel;
+import java.util.List;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
-
-import java.util.List;
 
 public class horario_estudiante {
     private JTable table1;
@@ -22,31 +21,30 @@ public class horario_estudiante {
     private static final String url = "";
 
     public horario_estudiante(String nombreEstudiante) {
-        // Crear el modelo de la tabla
+        // Creación del modelo de la tabla
         DefaultTableModel model = new DefaultTableModel();
 
-        // Definir las columnas de la tabla
+        // Se definen las columnas de la tabla
         model.addColumn("Día");
         model.addColumn("Horario");
 
-        // Configurar el JTable
         table1.setModel(model);
         table1.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         table1.setFillsViewportHeight(true);
 
-        // Conectar a la base de datos y cargar los datos del horario
+        // Conexión a la base de datos
         try (MongoClient mongoClient = MongoClients.create(url)) {
             MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
             MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");
 
-            // Buscar el estudiante por cédula
+            // Se busca el estudiante por cédula
             Document estudianteNombre = estudiantesCollection.find(new Document("nombre", nombreEstudiante)).first();
             if (estudianteNombre != null) {
-                // Obtener la cédula del estudiante
+                // Obteneción de la cédula del estudiante
                 String cedula = estudianteNombre.getString("cedula");
                 Document estudiante = estudiantesCollection.find(new Document("cedula", cedula)).first();
                 if (estudiante != null) {
-                    // Obtener el horario del estudiante
+                    // Obtención del horario del estudiante
                     List<String> horario = (List<String>) estudiante.get("horario");
 
                     // Definir los días de la semana
@@ -55,7 +53,7 @@ public class horario_estudiante {
                     // Agregar los días y los horarios en las filas
                     for (int i = 0; i < dias.length; i++) {
                         String dia = dias[i];
-                        String diaHorario = horario.get(i); // Obtener el horario del día de la lista
+                        String diaHorario = horario.get(i); // Aquí se obtiene el horario del día de la lista
 
                         model.addRow(new Object[]{dia, diaHorario});
                     }
@@ -71,7 +69,6 @@ public class horario_estudiante {
             ex.printStackTrace();
         }
 
-        // Botón para regresar a la pantalla anterior
         regresarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

@@ -65,13 +65,13 @@ public class register_estudiante {
                     return;
                 }
 
-                // Validar cédula: debe contener exactamente 10 dígitos
+                // Validar cédula (debe contener exactamente 10 dígitos)
                 if (!cedula.matches("\\d{10}")) {
                     JOptionPane.showMessageDialog(null, "La cédula debe tener exactamente 10 dígitos.");
                     return;
                 }
 
-                // Validar nombre: no debe contener números
+                // Validar nombre (no debe contener números)
                 if (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+")) {
                     JOptionPane.showMessageDialog(null, "El nombre no debe contener números ni caracteres especiales.");
                     return;
@@ -117,7 +117,7 @@ public class register_estudiante {
                         break;
                 }
 
-                // Generar el horario
+                // Generación del horario
                 List<String> horario = generarHorario(materias, curso);
 
                 // Inicializar las notas y asistencias con 0 para cada materia
@@ -128,7 +128,7 @@ public class register_estudiante {
                     asistencias.add(0);
                 }
 
-                // Conectar a la base de datos y registrar al estudiante con su horario
+                // Conexión a la base y se procede a registrar la información
                 try (MongoClient mongoClient = MongoClients.create(url)) {
                     MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
                     MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");
@@ -155,13 +155,12 @@ public class register_estudiante {
                             .append("materias", materias)
                             .append("notas", notas)
                             .append("asistencias", asistencias)
-                            .append("horario", horario); // Agregar el horario
+                            .append("horario", horario);
 
                     // Insertar el documento en la colección
                     estudiantesCollection.insertOne(estudiante);
                     JOptionPane.showMessageDialog(null, "Registro de estudiante exitoso. ID: " + nextUserId);
 
-                    // Limpiar los campos después del registro
                     cedulaField.setText("");
                     nombreField.setText("");
                     passwordField.setText("");
@@ -173,13 +172,13 @@ public class register_estudiante {
         });
     }
 
-    // Función para generar el horario automáticamente
+    // Metodo para generar el horario de forma automática
     private List<String> generarHorario(List<String> materias, String curso) {
-        // Definir las franjas horarias
+        // Definir las horas
         String[] horas = {"7:00-8:30", "8:30-10:00", "10:00-11:30", "11:30-13:00", "14:00-15:30", "15:30-17:00", "17:00-18:30"};
         List<String> horario = new ArrayList<>();
 
-        // Definir los días de la semana
+        // Definir los días de la semana del 1 al 5 (Lunes a Viernes)
         String[] dias = {"1", "2", "3", "4", "5"};
 
         // Crear una estructura para los horarios

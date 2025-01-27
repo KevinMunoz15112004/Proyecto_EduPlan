@@ -19,15 +19,14 @@ public class gestion_estudiantes {
     private static final String url = "";
 
     public gestion_estudiantes() {
-        // Establecer las columnas de la tabla
+        // Configuración del JTable
         String[] columnNames = {"ID", "Cédula", "Nombre", "Curso", "Contraseña"};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
         table1.setModel(tableModel);
 
-        // Cargar los datos de la base de datos
+        // Cargamos los datos de la base de datos
         cargarDatos(tableModel);
 
-        // Acción para eliminar un usuario
         eliminarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -36,14 +35,13 @@ public class gestion_estudiantes {
                     int userId = (int) table1.getValueAt(selectedRow, 0);
                     eliminarUsuario(userId);
                     tableModel.removeRow(selectedRow);
-                    reorganizarUserIds(); // Reorganizar el user_id tras eliminar
+                    reorganizarUserIds(); // Se reorganiza el id tras eliminar
                 } else {
                     JOptionPane.showMessageDialog(null, "Seleccione un usuario para eliminar.");
                 }
             }
         });
 
-        // Acción para actualizar un usuario
         actualizarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -51,7 +49,7 @@ public class gestion_estudiantes {
                 if (selectedRow != -1) {
                     int userId = (int) table1.getValueAt(selectedRow, 0);
 
-                    // Pedir los nuevos valores
+                    // Se piden los nuevos valores
                     String nuevaCedula = null;
                     while (nuevaCedula == null || nuevaCedula.trim().isEmpty()) {
                         nuevaCedula = JOptionPane.showInputDialog("Nueva cédula:");
@@ -61,7 +59,7 @@ public class gestion_estudiantes {
                             JOptionPane.showMessageDialog(null, "Debe ingresar una cédula.");
                         } else if (!nuevaCedula.matches("\\d{10}")) {
                             JOptionPane.showMessageDialog(null, "La cédula debe tener 10 dígitos numéricos.");
-                            nuevaCedula = null; // Repetir la validación
+                            nuevaCedula = null; // Repetir la validación hasta que sea correcta
                         }
                     }
 
@@ -74,11 +72,11 @@ public class gestion_estudiantes {
                             JOptionPane.showMessageDialog(null, "Debe ingresar un nombre.");
                         } else if (!nuevoNombre.matches("[A-Za-záéíóúÁÉÍÓÚñÑ\\s]+")) {
                             JOptionPane.showMessageDialog(null, "El nombre no debe contener números ni caracteres especiales.");
-                            nuevoNombre = null; // Repetir la validación
+                            nuevoNombre = null; // Repetir la validación hasta que sea correcta
                         }
                     }
 
-                    // Crear un JComboBox para elegir el curso
+                    // Se crea un JComboBox para elegir el curso
                     String[] cursos = {"8vo", "9no", "10mo", "1roBAC", "2doBAC", "3roBAC"};
                     JComboBox<String> cursoComboBox = new JComboBox<>(cursos);
                     int option = JOptionPane.showConfirmDialog(null, cursoComboBox, "Seleccionar curso", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
@@ -100,11 +98,11 @@ public class gestion_estudiantes {
                             JOptionPane.showMessageDialog(null, "Debe ingresar una contraseña.");
                         } else if (nuevoPassword.length() < 6) {
                             JOptionPane.showMessageDialog(null, "La contraseña debe tener al menos 6 caracteres.");
-                            nuevoPassword = null; // Repetir la validación
+                            nuevoPassword = null; // Repetir la validación hasta que sea correcta
                         }
                     }
 
-                    // Si las validaciones son correctas, se actualiza el usuario
+                    // Si las validaciones son correctas, se actualizará el usuario
                     actualizarUsuario(userId, nuevoNombre, nuevoCurso, nuevaCedula, nuevoPassword);
                     table1.setValueAt(nuevaCedula, selectedRow, 1);
                     table1.setValueAt(nuevoNombre, selectedRow, 2);
@@ -177,14 +175,14 @@ public class gestion_estudiantes {
             MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
             MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");
 
-            // Crear el nuevo documento con los datos actualizados
+            // Se crea el nuevo documento con los datos actualizados
             Document updatedDocument = new Document("user_id", userId)
                     .append("cedula", nuevaCedula)
                     .append("nombre", nuevoNombre)
                     .append("curso", nuevoCurso)
                     .append("password", nuevaContraseña);
 
-            // Actualizar el documento en la base de datos
+            // Se actualiza el documento en la base de datos
             estudiantesCollection.updateOne(new Document("user_id", userId), new Document("$set", updatedDocument));
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Error al actualizar el usuario: " + ex.getMessage());
@@ -197,7 +195,7 @@ public class gestion_estudiantes {
             MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
             MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");
 
-            // Obtener todos los documentos y reorganizar los user_id
+            // Se obtienen todos los documentos y se reorganizan los user_id
             MongoCursor<Document> cursor = estudiantesCollection.find().sort(new Document("user_id", 1)).iterator();
             int newUserId = 1;
             while (cursor.hasNext()) {

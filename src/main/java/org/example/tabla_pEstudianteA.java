@@ -19,12 +19,12 @@ public class tabla_pEstudianteA {
     private static final String url = "";
 
     public tabla_pEstudianteA(String nombreProfesor) {
-        // Configurar columnas de la tabla
+        // Configurar columnas del jtable
         String[] columnNames = {"ID", "Cédula", "Nombre", "Curso"};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
         table1.setModel(tableModel);
 
-        // Cargar datos de la base de datos
+        // Cargar datos de la base
         cargarDatos(nombreProfesor, tableModel);
 
         regresarButton.addActionListener(new ActionListener() {
@@ -72,7 +72,7 @@ public class tabla_pEstudianteA {
                 // Obtener las materias del profesor
                 java.util.List<String> listaMateriasProfesor = profesor.getList("materias", String.class);
 
-                // Obtener la colección de estudiantes
+                // Obtenención de la colección de estudiantes
                 MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");
                 MongoCursor<Document> cursor = estudiantesCollection.find().iterator();
 
@@ -133,11 +133,11 @@ public class tabla_pEstudianteA {
 
                     if (asistencia != null && !asistencia.isEmpty()) {
                         // Validar el formato de la nota (hasta dos decimales)
-                        if (NotaValida(asistencia)) {
+                        if (AsistenciaValida(asistencia)) {
                             // Obtener el índice de la materia
                             int materiaIndex = materiasEstudiante.indexOf(materia);
 
-                            // Nota a tipo INT
+                            // Asistencia a tipo int
                             int asistenciaRegistro = Integer.parseInt(asistencia);
 
                             // Actualizar el arreglo de notas del estudiante
@@ -153,8 +153,7 @@ public class tabla_pEstudianteA {
                             JOptionPane.showMessageDialog(null, "La Asistencia no es válida. Debe ser un entero.");
                         }
                     } else {
-                        // Si se cancela o se cierra el cuadro de entrada, salimos
-                        break;
+                        break; // Si se cancela o se cierra el cuadro de entrada, se sale
                     }
                 }
             } else {
@@ -166,7 +165,7 @@ public class tabla_pEstudianteA {
         }
     }
 
-    private boolean NotaValida(String asistencia) {
+    private boolean AsistenciaValida(String asistencia) {
         try {
             // Verifica si el número es un entero sin decimales y de hasta 100 dígitos
             return asistencia.matches("\\d{1,100}");

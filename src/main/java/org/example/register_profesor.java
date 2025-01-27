@@ -60,7 +60,7 @@ public class register_profesor {
                     return;
                 }
 
-                // Validar que el nombre no incluya números
+                // Validar que el nombre no incluya números ni caracteres especiales
                 if (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
                     JOptionPane.showMessageDialog(null, "El nombre no puede contener números ni caracteres especiales.");
                     return;
@@ -72,7 +72,7 @@ public class register_profesor {
                     return;
                 }
 
-                // Conectar a la base de datos y registrar al profesor
+                // Conectar a la base de datos y registrar la información
                 try (MongoClient mongoClient = MongoClients.create(url)) {
                     // Conectar a la base de datos y colección
                     MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
@@ -101,7 +101,7 @@ public class register_profesor {
                     materiaDialog.setModal(true);
                     materiaDialog.setVisible(true);
 
-                    // Esperar a que el usuario seleccione las materias y cierre la ventana
+                    // Se espera que el usuario seleccione las materias y cierre la ventana
                     List<String> materiasSeleccionadas = materiaFrame.getMateriasSeleccionadas();
                     if (materiasSeleccionadas.isEmpty()) {
                         JOptionPane.showMessageDialog(null, "Debe seleccionar al menos una materia.");
@@ -119,7 +119,6 @@ public class register_profesor {
                     collection.insertOne(profesor);
                     JOptionPane.showMessageDialog(null, "Registro exitoso. Profesor guardado con ID: " + nextProfesorId);
 
-                    // Limpiar los campos después del registro
                     cedulaField.setText("");
                     nombreField.setText("");
                     passwordField.setText("");
