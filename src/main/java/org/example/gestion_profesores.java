@@ -8,6 +8,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class gestion_profesores {
@@ -35,7 +37,7 @@ public class gestion_profesores {
                     int userId = (int) table1.getValueAt(selectedRow, 0);
                     eliminarUsuario(userId);
                     tableModel.removeRow(selectedRow);
-                    reorganizarUserIds(); // Reorganizar el id tras eliminar
+                    reorganizarUserIds();
                 } else {
                     JOptionPane.showMessageDialog(null, "Seleccione un usuario para eliminar.");
                 }
@@ -117,7 +119,8 @@ public class gestion_profesores {
                         }
                     }
 
-                    String nuevaMateria = materiasSeleccionadas.toString();
+                    String[] materiasArray = materiasSeleccionadas.toString().split(", ");
+                    List<String> materiasList = new ArrayList<>(Arrays.asList(materiasArray));
 
                     // Validación de contraseña (debe tener al menos 6 caracteres permitiendo letras y nmeros)
                     String nuevoPassword = null;
@@ -133,10 +136,10 @@ public class gestion_profesores {
                         }
                     }
 
-                    actualizarUsuario(userId, nuevoNombre, nuevaMateria, nuevaCedula, nuevoPassword);
+                    actualizarUsuario(userId, nuevoNombre, materiasList, nuevaCedula, nuevoPassword);
                     table1.setValueAt(nuevaCedula, selectedRow, 1);
                     table1.setValueAt(nuevoNombre, selectedRow, 2);
-                    table1.setValueAt(nuevaMateria, selectedRow, 3);
+                    table1.setValueAt(materiasList, selectedRow, 3);
                     table1.setValueAt(nuevoPassword, selectedRow, 4);
                 } else {
                     JOptionPane.showMessageDialog(null, "Seleccione un usuario para actualizar.");
@@ -209,7 +212,7 @@ public class gestion_profesores {
         }
     }
 
-    private void actualizarUsuario(int userId, String nuevoNombre, String nuevaMateria, String nuevaCedula, String nuevoPassword) {
+    private void actualizarUsuario(int userId, String nuevoNombre, List<String> nuevaMateria, String nuevaCedula, String nuevoPassword) {
         try (MongoClient mongoClient = MongoClients.create(url)) {
             MongoDatabase database = mongoClient.getDatabase(db);
             MongoCollection<Document> estudiantesCollection = database.getCollection("profesores");

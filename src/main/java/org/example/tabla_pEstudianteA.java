@@ -145,7 +145,7 @@ public class tabla_pEstudianteA {
 
                             JOptionPane.showMessageDialog(null, "Asistencia registrada correctamente para: " + nombreEstudiante);
                         } else {
-                            JOptionPane.showMessageDialog(null, "La Asistencia no es válida. Debe ser un entero.");
+                            JOptionPane.showMessageDialog(null, "La Asistencia no es válida.");
                         }
                     } else {
                         break;
@@ -162,10 +162,14 @@ public class tabla_pEstudianteA {
 
     private boolean AsistenciaValida(String asistencia) {
         try {
-            //numero es un entero sin decimales y de hasta 100 dígitos
-            return asistencia.matches("\\d{1,100}");
+            //validacion de que el valor es un número entre 1 y 100
+            if (asistencia.matches("\\d{1,3}")) {
+                int num = Integer.parseInt(asistencia);
+                return num >= 1 && num <= 100;
+            }
         } catch (Exception ex) {
             return false;
         }
+        return false;
     }
 }
