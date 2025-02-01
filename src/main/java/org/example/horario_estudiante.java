@@ -19,6 +19,7 @@ public class horario_estudiante {
     public JPanel horario;
 
     private static final String url = "";
+    private static final String db = "EduPlan";
 
     public horario_estudiante(String nombreEstudiante) {
         // Creación del modelo de la tabla
@@ -33,7 +34,7 @@ public class horario_estudiante {
         table1.setFillsViewportHeight(true);
 
         try (MongoClient mongoClient = MongoClients.create(url)) {
-            MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
+            MongoDatabase database = mongoClient.getDatabase(db);
             MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");
 
             // Se busca el estudiante por cédula

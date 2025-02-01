@@ -19,15 +19,14 @@ public class notas_estudiante {
     public JPanel notasPanel;
 
     private static final String url = "";
-    private static final String db = "notas";
+    private static final String db = "EduPlan";
 
     public notas_estudiante(String nombre) {
-        // Configuraciónd el Jtable
         String[] columnNames = {"Materias", "Nota"};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
         table1.setModel(tableModel);
 
-        // Cargar los datos desde la base
+        //Carga de datos desde la base
         cargarNotas(nombre, tableModel);
 
         regresarButton.addActionListener(new ActionListener() {
@@ -49,7 +48,7 @@ public class notas_estudiante {
 
     public void cargarNotas(String nombre, DefaultTableModel tableModel) {
         try(MongoClient mongoClient = MongoClients.create(url)){
-            MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
+            MongoDatabase database = mongoClient.getDatabase(db);
             MongoCollection<Document> nota = database.getCollection("estudiantes");
 
             Document estudiante = nota.find(new Document("nombre", nombre)).first();

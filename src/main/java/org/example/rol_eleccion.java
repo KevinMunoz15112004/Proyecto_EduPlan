@@ -12,7 +12,6 @@ public class rol_eleccion {
     private JButton regresarButton;
 
     public rol_eleccion() {
-        // Inicializar el JComboBox con las opciones
         rolBox.addItem("");
         rolBox.addItem("Estudiante");
         rolBox.addItem("Profesor");
@@ -53,14 +52,13 @@ public class rol_eleccion {
                     frame.setVisible(true);
 
                 } else if ("Administrador".equals(selectedRole)) {
-                    // Solicitar la clave de administrador
+                    // Solicitud de la clave de administrador
                     String adminKey = JOptionPane.showInputDialog(rolPanel, "Por favor, ingrese la clave de administrador:");
 
                     // Verificar si la clave es correcta
-                    String correctAdminKey = "admin123"; // Aquí puedes definir la clave correcta
+                    String correctAdminKey = "admin123";
 
                     if (adminKey != null && adminKey.equals(correctAdminKey)) {
-                        // Si la clave es correcta, abrir la ventana de registro de administrador
                         JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(rolPanel);
                         currentFrame.dispose();
 
@@ -73,7 +71,6 @@ public class rol_eleccion {
                         frame.setVisible(true);
 
                     } else {
-                        // Si la clave es incorrecta, mostrar un mensaje de error
                         JOptionPane.showMessageDialog(rolPanel, "Clave incorrecta. Acceso denegado.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 }

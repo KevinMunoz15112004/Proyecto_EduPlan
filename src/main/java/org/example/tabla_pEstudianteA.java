@@ -17,14 +17,13 @@ public class tabla_pEstudianteA {
     public JPanel tablaPEstudianteA;
 
     private static final String url = "";
+    private static final String db = "EduPlan";
 
     public tabla_pEstudianteA(String nombreProfesor) {
-        // Configurar columnas del jtable
         String[] columnNames = {"ID", "Cédula", "Nombre", "Curso"};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
         table1.setModel(tableModel);
 
-        // Cargar datos de la base
         cargarDatos(nombreProfesor, tableModel);
 
         regresarButton.addActionListener(new ActionListener() {
@@ -61,7 +60,7 @@ public class tabla_pEstudianteA {
 
     private void cargarDatos(String nombreProfesor, DefaultTableModel tableModel) {
         try (MongoClient mongoClient = MongoClients.create(url)) {
-            MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
+            MongoDatabase database = mongoClient.getDatabase(db);
 
             MongoCollection<Document> profesoresCollection = database.getCollection("profesores");
             Document profesor = profesoresCollection.find(new Document("nombre", nombreProfesor)).first();
@@ -100,18 +99,17 @@ public class tabla_pEstudianteA {
     }
 
     private void registrarAsistencia(String nombreEstudiante, String cedulaEstudiante, String nombreProfesor) {
-        // Obtener las materias comunes entre el profesor y el estudiante
         try (MongoClient mongoClient = MongoClients.create(url)) {
-            MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
+            MongoDatabase database = mongoClient.getDatabase(db);
 
-            // Obtener la colección de profesores
+            //Obtener la colección de profesores
             MongoCollection<Document> profesoresCollection = database.getCollection("profesores");
             Document profesor = profesoresCollection.find(new Document("nombre", nombreProfesor)).first();
 
-            // Obtener las materias del profesor
+            //Obtener las materias del profesor
             List<String> listaMateriasProfesor = profesor.getList("materias", String.class);
 
-            // Obtener la colección de estudiantes
+            //Obtener la colección de estudiantes
             MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");
             Document estudiante = estudiantesCollection.find(new Document("cedula", cedulaEstudiante)).first();
 
@@ -145,7 +143,7 @@ public class tabla_pEstudianteA {
                             Document updatedStudent = new Document("asistencias", notasEstudiante);
                             estudiantesCollection.updateOne(new Document("cedula", cedulaEstudiante), new Document("$set", updatedStudent));
 
-                            JOptionPane.showMessageDialog(null, "Asistencia registrada correctamente.");
+                            JOptionPane.showMessageDialog(null, "Asistencia registrada correctamente para: " + nombreEstudiante);
                         } else {
                             JOptionPane.showMessageDialog(null, "La Asistencia no es válida. Debe ser un entero.");
                         }
@@ -164,7 +162,7 @@ public class tabla_pEstudianteA {
 
     private boolean AsistenciaValida(String asistencia) {
         try {
-            //número es un entero sin decimales y de hasta 100 dígitos
+            //numero es un entero sin decimales y de hasta 100 dígitos
             return asistencia.matches("\\d{1,100}");
         } catch (Exception ex) {
             return false;

@@ -14,19 +14,20 @@ import com.mongodb.client.MongoDatabase;
 import static com.mongodb.client.model.Sorts.descending;
 import org.bson.Document;
 
-public class register_estudiante {
+public class register_estudianteAdmin {
     private JTextField cedulaField;
     private JTextField nombreField;
+    private JComboBox cursoComboBox;
     private JPasswordField passwordField;
     private JButton registrarButton;
     private JButton iniciarSesionButton;
-    public JPanel estudiantePanel;
-    private JComboBox cursoComboBox;
+    public JPanel estudianteAdminPanel;
+    private JButton regresarButton;
 
     private static final String url = "";
     private static final String db = "EduPlan";
 
-    public register_estudiante() {
+    public register_estudianteAdmin() {
         // Opciones del JComboBox
         cursoComboBox.addItem("8vo");
         cursoComboBox.addItem("9no");
@@ -34,22 +35,6 @@ public class register_estudiante {
         cursoComboBox.addItem("1roBAC");
         cursoComboBox.addItem("2doBAC");
         cursoComboBox.addItem("3roBAC");
-
-        iniciarSesionButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFrame estudianteframe = (JFrame) SwingUtilities.getWindowAncestor(estudiantePanel);
-                estudianteframe.dispose();
-
-                JFrame frame = new JFrame("Login");
-                frame.setContentPane(new login().logPanel);
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setSize(600, 600);
-                frame.setPreferredSize(new Dimension(600, 600));
-                frame.pack();
-                frame.setVisible(true);
-            }
-        });
 
         registrarButton.addActionListener(new ActionListener() {
             @Override
@@ -162,6 +147,38 @@ public class register_estudiante {
                     JOptionPane.showMessageDialog(null, "Error al registrar el estudiante: " + ex.getMessage());
                     ex.printStackTrace();
                 }
+            }
+        });
+
+        iniciarSesionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame estudianteframe = (JFrame) SwingUtilities.getWindowAncestor(estudianteAdminPanel);
+                estudianteframe.dispose();
+
+                JFrame frame = new JFrame("Login");
+                frame.setContentPane(new login().logPanel);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setSize(600, 600);
+                frame.setPreferredSize(new Dimension(600, 600));
+                frame.pack();
+                frame.setVisible(true);
+            }
+        });
+
+        regresarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame estudianteframe = (JFrame) SwingUtilities.getWindowAncestor(estudianteAdminPanel);
+                estudianteframe.dispose();
+
+                JFrame frame = new JFrame("Administrador");
+                frame.setContentPane(new interfaz_admin().interfaz_Admin);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setSize(500, 500);
+                frame.setPreferredSize(new Dimension(500, 500));
+                frame.pack();
+                frame.setVisible(true);
             }
         });
     }

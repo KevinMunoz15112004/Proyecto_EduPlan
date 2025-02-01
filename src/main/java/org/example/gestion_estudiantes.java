@@ -17,14 +17,14 @@ public class gestion_estudiantes {
     private JButton regresarButton;
 
     private static final String url = "";
+    private static final String db = "EduPlan";
 
     public gestion_estudiantes() {
-        // Configuración del JTable
         String[] columnNames = {"ID", "Cédula", "Nombre", "Curso", "Contraseña"};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
         table1.setModel(tableModel);
 
-        // Cargamos los datos de la base de datos
+        //carga de datos desde la base
         cargarDatos(tableModel);
 
         eliminarButton.addActionListener(new ActionListener() {
@@ -49,7 +49,7 @@ public class gestion_estudiantes {
                 if (selectedRow != -1) {
                     int userId = (int) table1.getValueAt(selectedRow, 0);
 
-                    // Se piden los nuevos valores
+                    //Ingreso de valores nuevos
                     String nuevaCedula = null;
                     while (nuevaCedula == null || nuevaCedula.trim().isEmpty()) {
                         nuevaCedula = JOptionPane.showInputDialog("Nueva cédula:");
@@ -133,7 +133,7 @@ public class gestion_estudiantes {
 
     private void cargarDatos(DefaultTableModel tableModel) {
         try (MongoClient mongoClient = MongoClients.create(url)) {
-            MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
+            MongoDatabase database = mongoClient.getDatabase(db);
             MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");
 
             // Obtenemos todos los documentos
@@ -157,7 +157,7 @@ public class gestion_estudiantes {
 
     private void eliminarUsuario(int userId) {
         try (MongoClient mongoClient = MongoClients.create(url)) {
-            MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
+            MongoDatabase database = mongoClient.getDatabase(db);
             MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");
 
             // Eliminar el documento con el user_id específico
@@ -170,7 +170,7 @@ public class gestion_estudiantes {
 
     private void actualizarUsuario(int userId, String nuevoNombre, String nuevoCurso, String nuevaCedula, String nuevaContraseña) {
         try (MongoClient mongoClient = MongoClients.create(url)) {
-            MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
+            MongoDatabase database = mongoClient.getDatabase(db);
             MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");
 
             Document updatedDocument = new Document("user_id", userId)
@@ -179,7 +179,6 @@ public class gestion_estudiantes {
                     .append("curso", nuevoCurso)
                     .append("password", nuevaContraseña);
 
-            // Se actualiza el documento en la base de datos
             estudiantesCollection.updateOne(new Document("user_id", userId), new Document("$set", updatedDocument));
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Error al actualizar el usuario: " + ex.getMessage());
@@ -189,7 +188,7 @@ public class gestion_estudiantes {
 
     private void reorganizarUserIds() {
         try (MongoClient mongoClient = MongoClients.create(url)) {
-            MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
+            MongoDatabase database = mongoClient.getDatabase(db);
             MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");
 
             MongoCursor<Document> cursor = estudiantesCollection.find().sort(new Document("user_id", 1)).iterator();

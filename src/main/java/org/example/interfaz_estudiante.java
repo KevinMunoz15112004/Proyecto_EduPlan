@@ -23,7 +23,7 @@ public class interfaz_estudiante {
     private JButton cerrarSesionButton;
 
     private static final String url = "";
-
+    private static final String db = "EduPlan";
 
     public interfaz_estudiante(String nombre) {
         bienvenidaLabel.setText("Bienvenido/a, " + nombre);
@@ -96,7 +96,7 @@ public class interfaz_estudiante {
             public void actionPerformed(ActionEvent e) {
                 try {
                     MongoClient mongoClient = MongoClients.create(url);
-                    MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
+                    MongoDatabase database = mongoClient.getDatabase(db);
                     MongoCollection<org.bson.Document> collection = database.getCollection("estudiantes");
 
                     // Se busca el estudiante por cédula
@@ -150,7 +150,6 @@ public class interfaz_estudiante {
                                 document.add(new Paragraph(dia));
                             }
 
-                            //Cerramos el documento
                             document.close();
                             JOptionPane.showMessageDialog(null, "El PDF se generó correctamente en: " + pdfFilePath);
                         } catch (Exception ex) {

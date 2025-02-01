@@ -18,6 +18,7 @@ public class register_admin {
     private JButton iniciarSesionButton;
 
     private static final String url = "";
+    private static final String db = "EduPlan";
 
     public register_admin() {
         registrarButton.addActionListener(new ActionListener() {
@@ -52,7 +53,7 @@ public class register_admin {
                 }
 
                 try (MongoClient mongoClient = MongoClients.create(url)) {
-                    MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
+                    MongoDatabase database = mongoClient.getDatabase(db);
                     MongoCollection<Document> administradoresCollection = database.getCollection("administradores");
 
                     Document existingAdmin = administradoresCollection.find(new Document("cedula", cedula)).first();
@@ -62,20 +63,18 @@ public class register_admin {
                         return;
                     }
 
-                    // Buscar el último admin_id asignado para incrementar el nuevo admin_id
+                    //se busca el ultimo admin_id asignado para incrementar el nuevo admin_id
                     Document lastAdmin = administradoresCollection.find()
                             .sort(descending("admin_id"))
                             .first();
 
                     int newAdminId = (lastAdmin == null) ? 1 : lastAdmin.getInteger("admin_id") + 1;
 
-                    // Crear el documento para insertar en la base de datos
                     Document newAdmin = new Document("admin_id", newAdminId)
                             .append("cedula", cedula)
                             .append("nombre", nombre)
                             .append("password", password);
 
-                    // Insertar el nuevo administrador en la base de datos
                     administradoresCollection.insertOne(newAdmin);
                     JOptionPane.showMessageDialog(null, "Administrador registrado con éxito!");
 

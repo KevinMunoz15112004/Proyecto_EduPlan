@@ -17,6 +17,7 @@ public class tabla_pEstudiantes {
     public JPanel interfazTablaP;
 
     private static final String url = "";
+    private static final String db = "EduPlan";
 
     public tabla_pEstudiantes(String nombreProfesor) {
         // Configurar columnas de la tabla
@@ -61,7 +62,7 @@ public class tabla_pEstudiantes {
 
     private void cargarDatos(String nombreProfesor, DefaultTableModel tableModel) {
         try (MongoClient mongoClient = MongoClients.create(url)) {
-            MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
+            MongoDatabase database = mongoClient.getDatabase(db);
 
             MongoCollection<Document> profesoresCollection = database.getCollection("profesores");
             Document profesor = profesoresCollection.find(new Document("nombre", nombreProfesor)).first();
@@ -101,16 +102,13 @@ public class tabla_pEstudiantes {
     private void registrarNotas(String nombreEstudiante, String cedulaEstudiante, String nombreProfesor) {
         // Obtener las materias comunes entre el profesor y el estudiante
         try (MongoClient mongoClient = MongoClients.create(url)) {
-            MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
+            MongoDatabase database = mongoClient.getDatabase(db);
 
-            // Obteneción de la colección de profesores
             MongoCollection<Document> profesoresCollection = database.getCollection("profesores");
             Document profesor = profesoresCollection.find(new Document("nombre", nombreProfesor)).first();
 
-            // Obtención de las materias del profesor
             List<String> listaMateriasProfesor = profesor.getList("materias", String.class);
 
-            // Obtencion la colección de estudiantes
             MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");
             Document estudiante = estudiantesCollection.find(new Document("cedula", cedulaEstudiante)).first();
 
@@ -140,11 +138,10 @@ public class tabla_pEstudiantes {
                             List<Double> notasEstudiante = estudiante.getList("notas", Double.class);
                             notasEstudiante.set(materiaIndex, notaDouble);
 
-                            // Actualizar el documento en la base de datos
                             Document updatedStudent = new Document("notas", notasEstudiante);
                             estudiantesCollection.updateOne(new Document("cedula", cedulaEstudiante), new Document("$set", updatedStudent));
 
-                            JOptionPane.showMessageDialog(null, "Nota registrada correctamente.");
+                            JOptionPane.showMessageDialog(null, "Nota registrada correctamente para: " + nombreEstudiante);
                         } else {
                             JOptionPane.showMessageDialog(null, "La nota no es válida. Debe tener hasta dos decimales.");
                         }

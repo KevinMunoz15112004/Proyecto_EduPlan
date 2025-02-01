@@ -19,14 +19,13 @@ public class asistencia_estudiante {
     public JPanel asistenciaPanel;
 
     private static final String url = "";
+    private static final String db = "EduPlan";
 
     public asistencia_estudiante(String nombreEstudiante) {
-        // Configuración inicial para el JTable
         String[] columnNames = {"Materias", "Asistencias"};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
         table1.setModel(tableModel);
 
-        // Cargamos la información desde la base de datos
         cargarAsistencias(nombreEstudiante, tableModel);
 
         regresarButton.addActionListener(new ActionListener() {
@@ -48,7 +47,7 @@ public class asistencia_estudiante {
 
     private void cargarAsistencias(String nombreEstudiante, DefaultTableModel tableModel) {
         try (MongoClient mongoClient = MongoClients.create(url)) {
-            MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
+            MongoDatabase database = mongoClient.getDatabase(db);
             MongoCollection<Document> asistencia = database.getCollection("estudiantes");
 
             // Se busca el documento del estudiante

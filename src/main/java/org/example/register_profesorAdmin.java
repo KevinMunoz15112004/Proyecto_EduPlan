@@ -1,35 +1,54 @@
 package org.example;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
-import java.util.ArrayList;
-
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import static com.mongodb.client.model.Sorts.descending;
 import org.bson.Document;
 
-public class register_profesor {
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.mongodb.client.model.Sorts.descending;
+
+public class register_profesorAdmin {
     private JTextField cedulaField;
     private JTextField nombreField;
     private JPasswordField passwordField;
     private JButton registrarButton;
     private JButton iniciarSesionButton;
-    public JPanel profesorPanel;
+    private JButton regresarButton;
+    public JPanel profesorAdminPanel;
 
     private static final String url = "";
     private static final String db = "EduPlan";
 
-    public register_profesor() {
+    public register_profesorAdmin() {
+
+        regresarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame estudianteframe = (JFrame) SwingUtilities.getWindowAncestor(profesorAdminPanel);
+                estudianteframe.dispose();
+
+                JFrame frame = new JFrame("Administrador");
+                frame.setContentPane(new interfaz_admin().interfaz_Admin);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setSize(500, 500);
+                frame.setPreferredSize(new Dimension(500, 500));
+                frame.pack();
+                frame.setVisible(true);
+            }
+        });
+
         iniciarSesionButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFrame profesorframe = (JFrame) SwingUtilities.getWindowAncestor(profesorPanel);
+                JFrame profesorframe = (JFrame) SwingUtilities.getWindowAncestor(profesorAdminPanel);
                 profesorframe.dispose();
 
                 JFrame frame = new JFrame("Login");
@@ -125,7 +144,6 @@ public class register_profesor {
         });
     }
 
-    // Clase para mostrar las materias
     public class materias_profe {
         public JPanel materiasPanel;
         private List<String> materiasSeleccionadas;

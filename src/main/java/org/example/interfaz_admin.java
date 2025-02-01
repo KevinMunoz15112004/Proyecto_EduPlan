@@ -21,7 +21,7 @@ public class interfaz_admin {
                 currentFrame.dispose();
 
                 JFrame frame = new JFrame("Registro de Profesor");
-                frame.setContentPane(new register_profesor().profesorPanel);
+                frame.setContentPane(new register_profesorAdmin().profesorAdminPanel);
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setSize(600, 600);
                 frame.setPreferredSize(new Dimension(600, 600));
@@ -37,7 +37,7 @@ public class interfaz_admin {
                 currentFrame.dispose();
 
                 JFrame frame = new JFrame("Registro de Estudiante");
-                frame.setContentPane(new register_estudiante().estudiantePanel);
+                frame.setContentPane(new register_estudianteAdmin().estudianteAdminPanel);
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setSize(600, 600);
                 frame.setPreferredSize(new Dimension(600, 600));

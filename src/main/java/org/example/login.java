@@ -23,6 +23,7 @@ public class login {
     private JButton ingresarButton;
 
     private static final String url = "";
+    private static final String db = "EduPlan";
 
     public login() {
         ingresarButton.addActionListener(new ActionListener() {
@@ -38,7 +39,7 @@ public class login {
                 }
 
                 try (MongoClient mongoClient = MongoClients.create(url)) {
-                    MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
+                    MongoDatabase database = mongoClient.getDatabase(db);
 
                     // Verificación en la colección estudiantes
                     MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");
