@@ -72,9 +72,7 @@ public class register_profesor {
                     return;
                 }
 
-                // Conectar a la base de datos y registrar la información
                 try (MongoClient mongoClient = MongoClients.create(url)) {
-                    // Conectar a la base de datos y colección
                     MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
                     MongoCollection<Document> collection = database.getCollection("profesores");
 
@@ -85,7 +83,6 @@ public class register_profesor {
                         return;
                     }
 
-                    // Obtener el último profesor_id y calcular el siguiente
                     Document lastProfesor = collection.find()
                             .sort(descending("profesor_id"))
                             .first();
@@ -101,21 +98,18 @@ public class register_profesor {
                     materiaDialog.setModal(true);
                     materiaDialog.setVisible(true);
 
-                    // Se espera que el usuario seleccione las materias y cierre la ventana
                     List<String> materiasSeleccionadas = materiaFrame.getMateriasSeleccionadas();
                     if (materiasSeleccionadas.isEmpty()) {
                         JOptionPane.showMessageDialog(null, "Debe seleccionar al menos una materia.");
                         return;
                     }
 
-                    // Crear el documento con el nuevo profesor_id y materias seleccionadas
                     Document profesor = new Document("profesor_id", nextProfesorId)
                             .append("cedula", cedula)
                             .append("nombre", nombre)
                             .append("password", password)
                             .append("materias", materiasSeleccionadas);  // Agregar las materias seleccionadas
 
-                    // Insertar el documento en la base de datos
                     collection.insertOne(profesor);
                     JOptionPane.showMessageDialog(null, "Registro exitoso. Profesor guardado con ID: " + nextProfesorId);
 
@@ -130,7 +124,7 @@ public class register_profesor {
         });
     }
 
-    // Clase interna para mostrar las materias
+    // Clase para mostrar las materias
     public class materias_profe {
         public JPanel materiasPanel;
         private List<String> materiasSeleccionadas;
@@ -158,7 +152,6 @@ public class register_profesor {
                             materiasSeleccionadas.add(checkBox.getText());
                         }
                     }
-                    // Cerrar la ventana después de seleccionar las materias
                     SwingUtilities.getWindowAncestor(materiasPanel).dispose();
                 }
             });

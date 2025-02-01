@@ -95,12 +95,11 @@ public class interfaz_estudiante {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    // Conexión a MongoDB Atlas
                     MongoClient mongoClient = MongoClients.create(url);
                     MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
                     MongoCollection<org.bson.Document> collection = database.getCollection("estudiantes");
 
-                    // Buscar el estudiante por cédula
+                    // Se busca el estudiante por cédula
                     org.bson.Document estudiante = collection.find(new org.bson.Document("nombre", nombre)).first();
                     String cedula = estudiante.getString("cedula");
                     org.bson.Document estudianteCedula = collection.find(new org.bson.Document("cedula", cedula)).first();
@@ -110,46 +109,48 @@ public class interfaz_estudiante {
                         return;
                     }
 
-                    // Extraer los datos necesarios
+                    //Ahora extraemos los datos necesarios
                     List<Double> notas = estudiante.getList("notas", Double.class);
                     List<Integer> asistencias = estudiante.getList("asistencias", Integer.class);
                     List<String> horario = estudiante.getList("horario", String.class);
+                    List<String> materias = estudiante.getList("materias", String.class);
 
-                    // Generar el PDF
+                    // Se genera el respectivo PDF
                     if (estudianteCedula != null) {
                         String pdfFilePath = "C:\\Users\\MI EQUIPO\\Downloads\\reporte " + estudianteCedula.getString("cedula") + ".pdf";
                         try (PdfWriter writer = new PdfWriter(pdfFilePath)) {
                             PdfDocument pdf = new PdfDocument(writer);
                             Document document = new Document(pdf);
 
-                            // Agregar título
+                            // Se agrega un titulo al doc
                             document.add(new Paragraph("Reporte del Estudiante")
                                     .setFontSize(18)
                                     .setBold());
 
-                            // Agregar información del estudiante
+                            // Se va agregando la respectiva info
                             document.add(new Paragraph("Nombre: " + estudianteCedula.getString("nombre")));
                             document.add(new Paragraph("Cédula: " + estudianteCedula.getString("cedula")));
                             document.add(new Paragraph("Curso: " + estudianteCedula.getString("curso")));
 
-                            // Agregar notas
+                            // mediante un bucle for se agregan las notas de cada materia
                             document.add(new Paragraph("\nNotas:"));
                             for (int i = 0; i < notas.size(); i++) {
                                 document.add(new Paragraph("Materia " + (i + 1) + ": " + notas.get(i)));
                             }
 
-                            // Agregar asistencias
+                            // Agregamos las asistencias existentes
                             document.add(new Paragraph("\nAsistencias:"));
                             for (int i = 0; i < asistencias.size(); i++) {
-                                document.add(new Paragraph("Materia " + (i + 1) + ": " + asistencias.get(i)));
+                                document.add(new Paragraph(materias.get(i) + ": " + asistencias.get(i)));
                             }
 
-                            // Agregar horario
+                            // Agregar el horario
                             document.add(new Paragraph("\nHorario:"));
                             for (String dia : horario) {
                                 document.add(new Paragraph(dia));
                             }
 
+                            //Cerramos el documento
                             document.close();
                             JOptionPane.showMessageDialog(null, "El PDF se generó correctamente en: " + pdfFilePath);
                         } catch (Exception ex) {

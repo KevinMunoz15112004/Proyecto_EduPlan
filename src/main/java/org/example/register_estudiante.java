@@ -117,10 +117,8 @@ public class register_estudiante {
                         break;
                 }
 
-                // Generación del horario
                 List<String> horario = generarHorario(materias, curso);
 
-                // Inicializar las notas y asistencias con 0 para cada materia
                 List<Double> notas = new ArrayList<>();
                 List<Integer> asistencias = new ArrayList<>();
                 for (int i = 0; i < materias.size(); i++) {
@@ -128,7 +126,6 @@ public class register_estudiante {
                     asistencias.add(0);
                 }
 
-                // Conexión a la base y se procede a registrar la información
                 try (MongoClient mongoClient = MongoClients.create(url)) {
                     MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
                     MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");
@@ -140,13 +137,11 @@ public class register_estudiante {
                         return;
                     }
 
-                    // Obtener el último user_id y calcular el siguiente
                     Document lastStudent = estudiantesCollection.find()
                             .sort(descending("user_id"))
                             .first();
                     int nextUserId = (lastStudent == null) ? 1 : lastStudent.getInteger("user_id") + 1;
 
-                    // Crear el documento para insertar, incluyendo el horario
                     Document estudiante = new Document("user_id", nextUserId)
                             .append("cedula", cedula)
                             .append("nombre", nombre)
@@ -157,7 +152,6 @@ public class register_estudiante {
                             .append("asistencias", asistencias)
                             .append("horario", horario);
 
-                    // Insertar el documento en la colección
                     estudiantesCollection.insertOne(estudiante);
                     JOptionPane.showMessageDialog(null, "Registro de estudiante exitoso. ID: " + nextUserId);
 
@@ -178,23 +172,19 @@ public class register_estudiante {
         String[] horas = {"7:00-8:30", "8:30-10:00", "10:00-11:30", "11:30-13:00", "14:00-15:30", "15:30-17:00", "17:00-18:30"};
         List<String> horario = new ArrayList<>();
 
-        // Definir los días de la semana del 1 al 5 (Lunes a Viernes)
         String[] dias = {"1", "2", "3", "4", "5"};
 
         // Crear una estructura para los horarios
         for (String dia : dias) {
             StringBuilder diaHorario = new StringBuilder(dia + ": ");
 
-            // Asignar materias a horas sin repetir
             for (String materia : materias) {
-                // Asignar una hora aleatoria a la materia (no repetir)
                 String hora = horas[(int) (Math.random() * horas.length)];
                 diaHorario.append(materia + " (" + hora + "), ");
             }
 
             horario.add(diaHorario.toString().replaceAll(", $", "")); // Eliminar la coma final
         }
-
         return horario;
     }
 }

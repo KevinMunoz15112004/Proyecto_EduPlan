@@ -57,14 +57,12 @@ public class tabla_pEstudianteA {
                 }
             }
         });
-
     }
 
     private void cargarDatos(String nombreProfesor, DefaultTableModel tableModel) {
         try (MongoClient mongoClient = MongoClients.create(url)) {
             MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
 
-            // Obtener la colección de profesores
             MongoCollection<Document> profesoresCollection = database.getCollection("profesores");
             Document profesor = profesoresCollection.find(new Document("nombre", nombreProfesor)).first();
 
@@ -125,14 +123,13 @@ public class tabla_pEstudianteA {
                         .filter(materiasEstudiante::contains)
                         .toList();
 
-                // Mostrar un cuadro de diálogo para cada materia común
                 for (String materia : materiasComunes) {
                     String asistencia = JOptionPane.showInputDialog(null,
                             "Ingrese la Asistencia para la materia: " + materia,
                             "Registrar Asistencia", JOptionPane.QUESTION_MESSAGE);
 
                     if (asistencia != null && !asistencia.isEmpty()) {
-                        // Validar el formato de la nota (hasta dos decimales)
+                        // Validacion del formato de la nota (hasta dos decimales)
                         if (AsistenciaValida(asistencia)) {
                             // Obtener el índice de la materia
                             int materiaIndex = materiasEstudiante.indexOf(materia);
@@ -153,7 +150,7 @@ public class tabla_pEstudianteA {
                             JOptionPane.showMessageDialog(null, "La Asistencia no es válida. Debe ser un entero.");
                         }
                     } else {
-                        break; // Si se cancela o se cierra el cuadro de entrada, se sale
+                        break;
                     }
                 }
             } else {
@@ -167,7 +164,7 @@ public class tabla_pEstudianteA {
 
     private boolean AsistenciaValida(String asistencia) {
         try {
-            // Verifica si el número es un entero sin decimales y de hasta 100 dígitos
+            //número es un entero sin decimales y de hasta 100 dígitos
             return asistencia.matches("\\d{1,100}");
         } catch (Exception ex) {
             return false;

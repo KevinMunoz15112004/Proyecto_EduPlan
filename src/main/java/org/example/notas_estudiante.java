@@ -20,7 +20,6 @@ public class notas_estudiante {
 
     private static final String url = "";
     private static final String db = "notas";
-    private static final String cN = "notas";
 
     public notas_estudiante(String nombre) {
         // Configuraciónd el Jtable
@@ -49,12 +48,10 @@ public class notas_estudiante {
     }
 
     public void cargarNotas(String nombre, DefaultTableModel tableModel) {
-        // Conexión a Mongo
         try(MongoClient mongoClient = MongoClients.create(url)){
             MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
             MongoCollection<Document> nota = database.getCollection("estudiantes");
 
-            // Se busca en el documento del estudiante
             Document estudiante = nota.find(new Document("nombre", nombre)).first();
 
             if (estudiante != null) {

@@ -37,7 +37,6 @@ public class login {
                     return;
                 }
 
-                // Conectar a Mongo y comprobar credenciales
                 try (MongoClient mongoClient = MongoClients.create(url)) {
                     MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
 
@@ -67,7 +66,6 @@ public class login {
                         }
                     }
 
-                    // Verificación en la colección profesores
                     MongoCollection<Document> profesoresCollection = database.getCollection("profesores");
                     Document profesor = profesoresCollection.find(new Document("cedula", cedula)).first();
 
@@ -92,7 +90,7 @@ public class login {
                             return;
                         }
                     }
-                    // Verificación en la colección administradores
+
                     MongoCollection<Document> administradoresCollection = database.getCollection("administradores");
                     Document administrador = administradoresCollection.find(new Document("cedula", cedula)).first();
 
@@ -119,7 +117,6 @@ public class login {
                         }
                     }
 
-                    // Si no se encuentra el usuario en ninguna colección, se mostrará un mensaje
                     JOptionPane.showMessageDialog(null, "Usuario no encontrado.");
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Error al verificar las credenciales: " + ex.getMessage());

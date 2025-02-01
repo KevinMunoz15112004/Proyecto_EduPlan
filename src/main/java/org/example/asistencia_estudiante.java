@@ -32,7 +32,6 @@ public class asistencia_estudiante {
         regresarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Se cierra la ventana actual para avanzar y mostrar la siguiente
                 JFrame loginFrame = (JFrame) SwingUtilities.getWindowAncestor(asistenciaPanel);
                 loginFrame.dispose();
 
@@ -48,7 +47,6 @@ public class asistencia_estudiante {
     }
 
     private void cargarAsistencias(String nombreEstudiante, DefaultTableModel tableModel) {
-        // Conexión a MongoDB
         try (MongoClient mongoClient = MongoClients.create(url)) {
             MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
             MongoCollection<Document> asistencia = database.getCollection("estudiantes");

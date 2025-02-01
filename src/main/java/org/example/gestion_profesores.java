@@ -167,7 +167,6 @@ public class gestion_profesores {
             MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
             MongoCollection<Document> estudiantesCollection = database.getCollection("profesores");
 
-            // Obtener todos los documentos
             MongoCursor<Document> cursor = estudiantesCollection.find().iterator();
             while (cursor.hasNext()) {
                 Document profesor = cursor.next();
@@ -180,9 +179,9 @@ public class gestion_profesores {
                 String curso = "";
                 if (materiasObject instanceof List) {
                     List<String> materiasList = (List<String>) materiasObject;
-                    curso = String.join(", ", materiasList); // Se unen las materias en una cadena separada por comas
+                    curso = String.join(", ", materiasList); //esto une las materias en una cadena separada por comas
                 } else if (materiasObject instanceof String) {
-                    curso = (String) materiasObject; // Si por alguna razón es un solo string
+                    curso = (String) materiasObject;
                 }
 
                 String password = profesor.getString("password");
@@ -216,7 +215,6 @@ public class gestion_profesores {
             MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
             MongoCollection<Document> estudiantesCollection = database.getCollection("profesores");
 
-            // Crear el nuevo documento con los datos actualizados
             Document updatedDocument = new Document("profesor_id", userId)
                     .append("cedula", nuevaCedula)
                     .append("nombre", nuevoNombre)
@@ -236,7 +234,6 @@ public class gestion_profesores {
             MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
             MongoCollection<Document> profesoresCollection = database.getCollection("profesores");
 
-            // Obtener todos los documentos y reorganizar los user_id
             MongoCursor<Document> cursor = profesoresCollection.find().sort(new Document("profesor_id", 1)).iterator();
             int newUserId = 1;
             while (cursor.hasNext()) {

@@ -63,7 +63,6 @@ public class tabla_pEstudiantes {
         try (MongoClient mongoClient = MongoClients.create(url)) {
             MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
 
-            // Obtener la colección de profesores
             MongoCollection<Document> profesoresCollection = database.getCollection("profesores");
             Document profesor = profesoresCollection.find(new Document("nombre", nombreProfesor)).first();
 
@@ -79,14 +78,13 @@ public class tabla_pEstudiantes {
                     Document estudiante = cursor.next();
                     List<String> materiasEstudiante = estudiante.getList("materias", String.class);
 
-                    // Verificar si hay materias comunes entre el profesor y el estudiante
+                    // verificar materias comunes entre el profesor y el estudiante
                     if (materiasEstudiante != null && listaMateriasProfesor.stream().anyMatch(materiasEstudiante::contains)) {
                         int userId = estudiante.getInteger("user_id");
                         String cedula = estudiante.getString("cedula");
                         String nombre = estudiante.getString("nombre");
                         String curso = estudiante.getString("curso");
 
-                        // Agregar el estudiante a la tabla
                         Object[] row = {userId, cedula, nombre, curso};
                         tableModel.addRow(row);
                     }
@@ -112,7 +110,7 @@ public class tabla_pEstudiantes {
             // Obtención de las materias del profesor
             List<String> listaMateriasProfesor = profesor.getList("materias", String.class);
 
-            // Obtención la colección de estudiantes
+            // Obtencion la colección de estudiantes
             MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");
             Document estudiante = estudiantesCollection.find(new Document("cedula", cedulaEstudiante)).first();
 
@@ -124,14 +122,13 @@ public class tabla_pEstudiantes {
                         .filter(materiasEstudiante::contains)
                         .toList();
 
-                // Cuadro de diálogo para cada materia común
                 for (String materia : materiasComunes) {
                     String nota = JOptionPane.showInputDialog(null,
                             "Ingrese la nota para la materia: " + materia,
                             "Registrar Nota", JOptionPane.QUESTION_MESSAGE);
 
                     if (nota != null && !nota.isEmpty()) {
-                        // Validación  del formato de la nota (hasta dos decimales)
+                        // Validación del formato de la nota (hasta dos decimales)
                         if (NotaValida(nota)) {
                             // Obtener el índice de la materia
                             int materiaIndex = materiasEstudiante.indexOf(materia);
@@ -152,7 +149,7 @@ public class tabla_pEstudiantes {
                             JOptionPane.showMessageDialog(null, "La nota no es válida. Debe tener hasta dos decimales.");
                         }
                     } else {
-                        break;  // Si se cancela o se cierra el cuadro de entrada, se sale
+                        break;
                     }
                 }
             } else {
@@ -166,7 +163,7 @@ public class tabla_pEstudiantes {
 
     private boolean NotaValida(String nota) {
         try {
-            // Verifica si el formato es un número con hasta dos decimales
+            // número con hasta dos decimales
             return nota.matches("\\d{1,2}\\.\\d{2}");
         } catch (Exception ex) {
             return false;

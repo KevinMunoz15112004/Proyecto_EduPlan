@@ -32,7 +32,6 @@ public class horario_estudiante {
         table1.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         table1.setFillsViewportHeight(true);
 
-        // Conexión a la base de datos
         try (MongoClient mongoClient = MongoClients.create(url)) {
             MongoDatabase database = mongoClient.getDatabase("prueba_alfa");
             MongoCollection<Document> estudiantesCollection = database.getCollection("estudiantes");
@@ -47,13 +46,12 @@ public class horario_estudiante {
                     // Obtención del horario del estudiante
                     List<String> horario = (List<String>) estudiante.get("horario");
 
-                    // Definir los días de la semana
                     String[] dias = {"Lunes", "Martes", "Miércoles", "Jueves", "Viernes"};
 
-                    // Agregar los días y los horarios en las filas
+                    // agregamos los días y los horarios en las filas
                     for (int i = 0; i < dias.length; i++) {
                         String dia = dias[i];
-                        String diaHorario = horario.get(i); // Aquí se obtiene el horario del día de la lista
+                        String diaHorario = horario.get(i);
 
                         model.addRow(new Object[]{dia, diaHorario});
                     }
